@@ -1,0 +1,95 @@
+* hello devcards
+** svg clipping path
+   #+BEGIN_SRC xml
+     <path xmlns="http://www.w3.org/2000/svg"
+           d="M 950,81  A 107,107 0 0,1 950,295 A 107,107 0 0,1 950,81 z
+              M 950,139 A 49,49   0 0,0 950,237 A 49,49   0 0,0 950,139 z"/>
+   #+END_SRC
+
+   #+BEGIN_SRC xml
+     <?xml version="1.0" standalone="no"?>
+     <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+     "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+     <svg width="12cm" height="5.25cm" viewBox="0 0 1200 400"
+          xmlns="http://www.w3.org/2000/svg" version="1.1">
+         <title>Example arcs01 - arc commands in path data</title>
+         <desc>Picture of a pie chart with two pie wedges and
+               a picture of a line with arc blips</desc>
+
+         <rect x="1" y="1" width="1198" height="398"
+               fill="none" stroke="blue" stroke-width="1" />
+
+         <path d="M300,200 h-150 a150,150 0 1,0 150,-150 z"
+               fill="red" stroke="blue" stroke-width="5" />
+         <path d="M275,175 v-150 a150,150 0 0,0 -150,150 z"
+               fill="yellow" stroke="blue" stroke-width="5" />
+
+         <path d="M600,350 l 50,-25
+                  a25,25 -30 0,1 50,-25 l 50,-25
+                  a25,50 -30 0,1 50,-25 l 50,-25
+                  a25,75 -30 0,1 50,-25 l 50,-25
+                  a25,100 -30 0,1 50,-25 l 50,-25"
+               fill="none" stroke="red" stroke-width="5"  />
+     </svg>
+   #+END_SRC
+** react svg supported tags and attributes
+   http://facebook.github.io/react/docs/tags-and-attributes.html
+
+** react-state-stream
+   react animation on steroids
+   https://github.com/chenglou/react-state-stream
+** thi-ng geom-svg
+   https://github.com/thi-ng/geom/blob/master/geom-svg/src/core.org#svg-conversions-for-geomtypes
+
+** parinfer
+   Let's simplify the way we write Lisp
+
+   https://shaunlebron.github.io/parinfer/#editor-plugins
+** om aouto complete widget
+   https://github.com/omcljs/om/wiki/Remote-Synchronization-Tutorial#building-a-simple-auto-completion-widget
+** om next demo
+   https://github.com/swannodette/om-next-demo
+** analemma
+   calc
+   http://www.wsanford.com/~wsanford/exo/sundials/analemma_calc.html
+
+   svg
+   https://github.com/liebke/analemma/blob/master/src/analemma/svg.clj
+
+** sundials
+   http://sundialsoc.org.uk/discussions/how-do-sundials-work/
+
+** ws-ldn
+   file:///Users/wbabic/dev/clojurescript/ws-ldn-1/resources/public/index.html
+
+** nine men's morris
+   https://en.wikipedia.org/wiki/Nine_Men%27s_Morris
+   http://library.msri.org/books/Book29/files/gasser.pdf
+** dependency
+   https://github.com/stuartsierra/dependency
+
+   A data structure for representing dependency graphs in Clojure.
+
+   This library provides a basic implementation of a
+   directed acyclic graph (DAG) data structure,
+   represented as a pair of maps.
+
+   It is immutable and persistent.
+
+   Nodes in the graph may be any type which supports Clojure's
+   equality semantics such as keywords, symbols, or strings.
+
+   I originally developed this library to support namespace dependency
+   tracking in tools.namespace, where it is still included under the
+   name clojure.tools.namespace.dependency.
+
+   I am releasing this library independently so that other projects can
+   use it without adding a dependency on all of tools.namespace.
+
+** tools.namespace
+   https://github.com/clojure/tools.namespace
+
+   Tools for managing namespaces in Clojure.
+   Parse ns declarations from source files, extract their dependencies,
+   build a graph of namespace dependencies within a project,
+   update that graph as files change, and reload files in the correct order.
