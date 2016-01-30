@@ -1,4 +1,8 @@
 * hello devcards
+** usage
+   lein figwheel
+   http://localhost:3449/cards.html
+
 ** svg clipping path
    #+BEGIN_SRC xml
      <path xmlns="http://www.w3.org/2000/svg"
@@ -45,7 +49,7 @@
    Let's simplify the way we write Lisp
 
    https://shaunlebron.github.io/parinfer/#editor-plugins
-** om aouto complete widget
+** om auto complete widget
    https://github.com/omcljs/om/wiki/Remote-Synchronization-Tutorial#building-a-simple-auto-completion-widget
 ** om next demo
    https://github.com/swannodette/om-next-demo

@@ -6,8 +6,9 @@
 
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [org.clojure/clojurescript "1.7.170"]
-                 [devcards "0.2.1"]
-                 [sablono "0.4.0"]
+                 [org.clojure/tools.reader "1.0.0-alpha1"]
+                 [devcards "0.2.1-5" :exclusions [org.clojure/tools.reader]]
+                 [sablono "0.5.3"]
                  [org.omcljs/om "0.9.0"]
                  [reagent "0.5.1"]
 
@@ -17,16 +18,17 @@
 
                  [complex/complex "0.1.8"]
 
-                 ;; for conflict resolution
-                 [clj-time "0.9.0"]
                  [ring/ring-core "1.4.0"]
+                 [clj-time "0.9.0"]
 
                  ;; for fun
                  [timothypratley/reanimated "0.1.1"]]
 
-  :plugins [[lein-cljsbuild "1.1.1"]
-            [lein-figwheel "0.5.0" :exclusions [org.clojure/clojure
-                                                ring/ring-core joda-time]]]
+  :plugins [[lein-cljsbuild "1.1.2"]
+            [lein-figwheel "0.5.0-3"
+             :exclusions [org.clojure/clojure
+                          ring/ring-core joda-time
+                          org.clojure/tools.reader]]]
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled"
                                     "target"]
