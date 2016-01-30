@@ -15,11 +15,10 @@
  (in-ns 'hello-devcards.bezier)
  )
 
-(defcard hello-bezier
-  "say hello to my new friend bezier quadratic"
+(defcard quadratic-bezier
+  "M 30 75 Q 240 30 300 120"
   (sab/html
    [:div
-    [:h1 "Hello Sablono"]
     [:svg {:width 400 :height 400}
      [:path {:d "M 30 75 Q 240 30 300 120"
              :stroke "red"
@@ -28,15 +27,15 @@
      [:circle {:cx 240 :cy 30 :r 3 :stroke "blue" :fill "none"}]
      [:circle {:cx 300 :cy 120 :r 3 :stroke "blue" :fill "none"}]]]))
 
-(defcard quadratic-bezier
-  "an svg bezier quadratic path d=M 30 100 Q 80 30 100 100 T 200 80"
+(defcard quadratic-polybezier
+  "M 30 100 Q 80 30 100 100 T 200 80"
   (sab/html
    [:div
     [:svg {:width 400 :height 400}
      [:path {:d "M 30 100 Q 80 30 100 100 T 200 80"
              :stroke "red"
              :fill "none"}]
-     [:circle {:cx 30 :cy 100 :r 3 :stroke "blue" :fill "none"}]
+     [:circle {:cx 30 :cy 100 :r 3 :stroke "green" :fill "none"}]
      [:circle {:cx 80 :cy 30 :r 3 :stroke "blue" :fill "none"}]
      [:circle {:cx 100 :cy 100 :r 3 :stroke "blue" :fill "none"}]
-     [:circle {:cx 200 :cy 80 :r 3 :stroke "blue" :fill "none"}]]]))
+     [:circle {:cx 200 :cy 80 :r 3 :stroke "red" :fill "none"}]]]))
