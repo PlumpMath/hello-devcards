@@ -28,20 +28,15 @@
      [:circle {:cx 240 :cy 30 :r 3 :stroke "blue" :fill "none"}]
      [:circle {:cx 300 :cy 120 :r 3 :stroke "blue" :fill "none"}]]]))
 
-(defn svg-bezier
-  ""
-  []
-  [:div
-   [:svg {:width 400 :height 400}
-    [:path {:d "M 30 100 Q 80 30 100 100 T 200 80"
-            :stroke "red"
-            :fill "none"}]
-    [:circle {:cx 30 :cy 100 :r 3 :stroke "blue" :fill "none"}]
-    [:circle {:cx 80 :cy 30 :r 3 :stroke "blue" :fill "none"}]
-    [:circle {:cx 100 :cy 100 :r 3 :stroke "blue" :fill "none"}]
-    [:circle {:cx 200 :cy 80 :r 3 :stroke "blue" :fill "none"}]]])
-
-(defcard-rg quadratic-bezier
+(defcard quadratic-bezier
   "an svg bezier quadratic path d=M 30 100 Q 80 30 100 100 T 200 80"
-  [svg-bezier]
-  )
+  (sab/html
+   [:div
+    [:svg {:width 400 :height 400}
+     [:path {:d "M 30 100 Q 80 30 100 100 T 200 80"
+             :stroke "red"
+             :fill "none"}]
+     [:circle {:cx 30 :cy 100 :r 3 :stroke "blue" :fill "none"}]
+     [:circle {:cx 80 :cy 30 :r 3 :stroke "blue" :fill "none"}]
+     [:circle {:cx 100 :cy 100 :r 3 :stroke "blue" :fill "none"}]
+     [:circle {:cx 200 :cy 80 :r 3 :stroke "blue" :fill "none"}]]]))
