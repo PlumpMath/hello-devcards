@@ -39,3 +39,18 @@
      [:circle {:cx 80 :cy 30 :r 3 :stroke "blue" :fill "none"}]
      [:circle {:cx 100 :cy 100 :r 3 :stroke "blue" :fill "none"}]
      [:circle {:cx 200 :cy 80 :r 3 :stroke "red" :fill "none"}]]]))
+
+(defcard use-path
+  (sab/html
+   [:svg {:width 400 :height 400 :view-box "0 0 400 400"}
+    [:defs
+     [:g {:id "test"}
+      [:line {:x1 0 :y1 0 :x2 50 :y2 0}]
+      [:circle {:cx 50 :cy 0 :r 3 :stroke "green" :fill "none"}]]]
+    [:use {:xlink-href "#test" :stroke "red"}]
+    [:use {:xlink-href "#test" :transform "rotate(45)" :stroke "blue"}]
+    [:use {:xlink-href "#test" :transform "translate(200, 200)" :stroke "green"}]
+    [:use {:xlink-href "#test" :transform "translate(200, 200)" :stroke "green"}]
+    [:use {:xlink-href "#test" :transform "translate(10,40) rotate(45) scale(4)" :stroke "purple"}]
+    [:use {:xlink-href "#test" :transform "translate(200, 200) rotate(45)" :stroke "purple"}]
+    [:use {:xlink-href "#test" :transform "rotate(10) translate(200, 200)" :stroke "purple"}]]))

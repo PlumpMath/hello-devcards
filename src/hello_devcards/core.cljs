@@ -1,5 +1,6 @@
 (ns hello-devcards.core
   (:require
+   [devcards.core]
    [complex.number :as n :refer [zero one i negative-one negative-i infinity add sub mult div]]
    [hello-devcards.circle]
    [hello-devcards.bezier]
@@ -52,15 +53,15 @@ and the outside
 ;; http://localhost:3449/cards.html
 
 ;; color values
-(def red      (col/rgba 1 0 0 1.0))
-(def lt-red   (col/rgba 1 0 0 0.25))
-(def green    (col/rgba 0 1 0 1.0))
-(def lt-green (col/rgba 0 1 0 0.25))
-(def blue     (col/rgba 0 0 1 1.0))
-(def lt-blue  (col/rgba 0 0 1 0.25))
-(def lt-grey  (col/rgba 0.1 0.1 0.1 0.25))
+(def red       (col/rgba 1 0 0 1.0))
+(def lt-red    (col/rgba 1 0 0 0.25))
+(def green     (col/rgba 0 1 0 1.0))
+(def lt-green  (col/rgba 0 1 0 0.25))
+(def blue      (col/rgba 0 0 1 1.0))
+(def lt-blue   (col/rgba 0 0 1 0.25))
+(def lt-grey   (col/rgba 0.1 0.1 0.1 0.25))
 (def lt-purple (col/rgba .8 0 0.8 0.25))
-(def clear    (col/rgba 0 0 0 0.0))
+(def clear     (col/rgba 0 0 0 0.0))
 
 (defn two-color-circle-style
   [edge inside]
