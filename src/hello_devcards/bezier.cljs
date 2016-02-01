@@ -1,5 +1,6 @@
 (ns hello-devcards.bezier
   (:require
+   [devcards.core]
    [complex.number :as n :refer [zero one i negative-one negative-i infinity add sub mult div]]
    [complex.vector :as v]
    [reagent.core :as reagent]
@@ -12,7 +13,7 @@
    [devcards.core :as dc :refer [defcard deftest defcard-rg defcard-doc]]))
 
 (comment
- (in-ns 'hello-devcards.bezier)
+  (in-ns 'hello-devcards.bezier)
  )
 
 (defcard quadratic-bezier
