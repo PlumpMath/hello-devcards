@@ -54,3 +54,18 @@
     [:use {:xlink-href "#test" :transform "translate(10,40) rotate(45) scale(4)" :stroke "purple"}]
     [:use {:xlink-href "#test" :transform "translate(200, 200) rotate(45)" :stroke "purple"}]
     [:use {:xlink-href "#test" :transform "rotate(10) translate(200, 200)" :stroke "purple"}]]))
+
+(defcard arrow
+  (sab/html
+   [:div
+    [:svg {:width 200 :height 200 :view-box "0 0 200 200"}
+     [:defs
+      [:g {:id "turtle-shell"}
+       [:line {:x1 0 :y1 0 :x2 30 :y2 0}]
+       [:circle {:cx 0 :cy 0 :r 3 :stroke "green" :fill "blue"}]
+       [:path {:d "M 50 0 Q 40 0 30 10 Q 33 5 30 0"}]
+       [:path {:d "M 50 0 Q 40 0 30 -10 Q 33 -5 30 0"}]]]
+     [:use {:xlink-href "#turtle-shell"
+            :transform "translate(50, 50) rotate(30) scale(2)"
+            :stroke "purple"
+            :fill "orange"}]]]))
