@@ -7,12 +7,15 @@
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [org.clojure/clojurescript "1.7.170"]
                  [org.clojure/tools.reader "1.0.0-alpha1"]
+                 [org.clojure/tools.analyzer.jvm "0.6.9"]
                  [devcards "0.2.1-5" :exclusions [org.clojure/tools.reader]]
                  [sablono "0.5.3"]
                  [org.omcljs/om "0.9.0"]
                  [reagent "0.5.1"]
+                 [org.clojure/core.match "0.3.0-alpha4"]
+                 [org.clojure/core.async "0.2.374"]
 
-                 [thi.ng/geom "0.0.908"]
+                 [thi.ng/geom "0.0.908" :exclusions [org.clojure/tools.analyzer.jvm]]
                  [thi.ng/color "1.0.0"]
                  [thi.ng/strf "0.2.1"]
 

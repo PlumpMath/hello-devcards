@@ -4,6 +4,7 @@
    [complex.number :as n :refer [zero one i negative-one negative-i infinity add sub mult div]]
    [hello-devcards.circle]
    [hello-devcards.bezier]
+   [hello-devcards.pixie-turtle]
    [reagent.core :as reagent]
    [timothypratley.reanimated.core :as anim]
    [sablono.core :as sab :include-macros true]

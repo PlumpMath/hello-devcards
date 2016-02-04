@@ -67,6 +67,30 @@
        [:path {:d "M 50 0 Q 40 0 30 10 Q 33 5 30 0"}]
        [:path {:d "M 50 0 Q 40 0 30 -10 Q 33 -5 30 0"}]]]
      [:use {:xlink-href "#turtle-shell"
-            :transform "translate(50, 50) rotate(30) scale(2)"
+            :transform "translate(20, 5) rotate(10) scale(1.5)"
             :stroke "purple"
-            :fill "orange"}]]]))
+            :fill "orange"}]
+     [:use {:xlink-href "#turtle-shell"
+            :transform "translate(20, 20) rotate(30) scale(2)"
+            :stroke "purple"
+            :fill "orange"}]
+     [:use {:xlink-href "#turtle-shell"
+            :transform "translate(20, 70) rotate(60) scale(2.5)"
+            :stroke "blue"
+            :fill "red"}]]]))
+
+(defcard corner-bezier
+  (sab/html
+   [:div
+    [:svg {:width 200 :height 200 :view-box "0 0 200 200"}
+     [:defs
+      [:g {:id "corner-bezier"}
+       [:path {:d "M 0 0 Q 200 0 200 200 Q 0 200 0 0"}]]]
+     [:use {:xlink-href "#corner-bezier"
+            :stroke "purple"
+            :fill "yellow"}]
+     [:path {:d "M 0 0 L 200 0 200 200 0 200 0 0"
+             :stroke "black"
+             :fill "transparent"}]
+     [:path {:d "M 0 0 L 200 200"
+             :stroke "black"}]]]))

@@ -2,7 +2,8 @@
 ** usage
    lein figwheel
    http://localhost:3449/cards.html
-
+** pixie-turtle
+   translate()
 ** svg clipping path
    #+BEGIN_SRC xml
      <path xmlns="http://www.w3.org/2000/svg"
