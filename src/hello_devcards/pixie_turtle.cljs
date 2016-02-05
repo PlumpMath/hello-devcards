@@ -25,12 +25,7 @@
   {:position [160 160]
    :heading :north
    :scale 1
-   :config :medium})
-
-(def resolutions
-  {:small  {:resolution 160 :arrow-length 20}
-   :medium {:resolution 320 :arrow-length 40}
-   :large  {:resolution 640 :arrow-length 80}})
+   :resolution 320})
 
 (def app-state (reagent/atom init-app-state))
 
@@ -126,26 +121,23 @@
           (swap! app-state #(process-command command %))
           (recur)))))
 
-(defn pixie-path [config]
-  (let [{:keys [resolution arrow-length]} (resolutions config)
-        base-length (- arrow-length 20)]
-    [:g {:id "pixie"}
-     [:line {:x1 0 :y1 0 :x2 30 :y2 0}]
-     [:circle {:cx 0 :cy 0 :r 3 :stroke "green" :fill "blue"}]
-     [:path {:d "M 40 0 Q 30 0 30 10 Q 33 5 30 0"}]
-     [:path {:d "M 40 0 Q 30 0 30 -10 Q 33 -5 30 0"}]]))
+(def pixie-path
+  [:g {:id "pixie"}
+   [:line {:x1 0 :y1 0 :x2 30 :y2 0}]
+   [:circle {:cx 0 :cy 0 :r 3 :stroke "green" :fill "blue"}]
+   [:path {:d "M 40 0 Q 30 0 30 10 Q 33 5 30 0"}]
+   [:path {:d "M 40 0 Q 30 0 30 -10 Q 33 -5 30 0"}]])
 
 (defn pixie-turtle [app-state]
-  (let [{:keys [position heading scale config]} @app-state
+  (let [{:keys [position heading scale resolution]} @app-state
         [x y] position
-        {:keys [resolution arrow-length]} (resolutions config)
         chan (chan)
         _ (process-channel chan)]
     [:div
      (command-buttons chan)
      [:svg {:width resolution :height resolution}
       [:defs
-       (pixie-path config)]
+       pixie-path]
       [:use {:xlink-href "#pixie"
              :transform (str "translate(" x "," y ") "
                              "rotate(" (heading->angle heading) ") "
