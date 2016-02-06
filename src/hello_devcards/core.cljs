@@ -5,6 +5,7 @@
    [hello-devcards.circle]
    [hello-devcards.bezier]
    [hello-devcards.pixie-turtle]
+   [hello-devcards.chessboard]
    [reagent.core :as reagent]
    [timothypratley.reanimated.core :as anim]
    [sablono.core :as sab :include-macros true]

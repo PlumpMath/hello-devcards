@@ -1,16 +1,13 @@
-(ns hello-devcards.pixie-turtle
+(ns hello-devcards.chessboard
   (:require
    [devcards.core]
    [hello-devcards.pixie :as p]
+   [hello-devcards.svg :as svg]
    [reagent.core :as reagent]
    [cljs.core.async :as async :refer [>! <! put! chan alts! timeout]])
   (:require-macros
    [devcards.core :as dc :refer [defcard deftest defcard-rg defcard-doc]]
    [cljs.core.async.macros :refer [go]]))
-
-(comment
-  (in-ns 'hello-devcards.pixie-turtle)
-  )
 
 (enable-console-print!)
 
@@ -38,35 +35,38 @@
 (defn process-channel [turtle-channel]
   (go (loop []
         (let [command (<! turtle-channel)]
+          (println command)
           (swap! app-state #(p/process-command command %))
           (recur)))))
 
-(def pixie-path
-  [:g {:id "pixie"}
-   [:line {:x1 0 :y1 0 :x2 30 :y2 0}]
-   [:circle {:cx 0 :cy 0 :r 3 :stroke "green" :fill "blue"}]
-   [:path {:d "M 40 0 Q 30 0 30 10 Q 33 5 30 0"}]
-   [:path {:d "M 40 0 Q 30 0 30 -10 Q 33 -5 30 0"}]])
-
-(defn pixie-turtle [app-state]
-  (let [{:keys [position heading scale resolution]} @app-state
-        [x y] position
+(defn board
+  "an svg chessboard using a pixie turtle"
+  [app-atate]
+  (let [turtle @app-state
         chan (chan)
         _ (process-channel chan)]
     [:div
      (command-buttons chan)
-     [:svg {:width resolution :height resolution}
-      [:defs
-       pixie-path]
-      [:use {:xlink-href "#pixie"
-             :transform (str "translate(" x "," y ") "
-                             "rotate(" (p/heading->angle heading) ") "
-                             "scale(" scale ") ")
-             :stroke "purple"
-             :fill "orange"}]]]))
+     [:svg {:width 800 :height 600}
+      (svg/defs (svg/straight-arrow "arrow" 32))
+      (svg/use-path "#arrow" (svg/transform-str [16 16] 0 2))]]))
 
-(defcard-rg pixie
-  "a pixel turtle in a finite discrete pixel space"
-  [pixie-turtle app-state]
+(defcard-rg chessboard
+  "a chessboard"
+  [board app-state]
   app-state
   {:inspect-data true :history true})
+
+(comment
+  (board)
+  ;;=>
+  [:div
+   [:svg {:width 800, :height 600}
+    [:defs [:g {:id "arrow"}
+            [:circle {:cx 0, :cy 0, :r 3}]
+            [:path {:d "M 0 0 l 16 0 l 2 2 l 0 -4 l -2 2 "}]]]
+    [:use {:xlink-href "#arrow",
+           :transform "translate(16,16) rotate(0) scale(2) ",
+           :stroke "black",
+           :fill "transparent"}]]]
+  )
