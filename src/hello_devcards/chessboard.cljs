@@ -11,7 +11,12 @@
 
 (enable-console-print!)
 
-(def app-state (reagent/atom p/init-app-state))
+(def init-app-state
+  {:position [20 40]
+   :heading :east
+   :scale 1})
+
+(def app-state (reagent/atom init-app-state))
 
 (defn send!
   "Send information from the user to the message queue.
@@ -25,8 +30,8 @@
   "gui with command buttons"
   [ui-channel]
   [:div
-   [:button {:on-click (send! ui-channel (p/->Forward (* 40  1)))}   "Forward"]
-   [:button {:on-click (send! ui-channel (p/->Forward (* 40 -1)))}   "Backward"]
+   [:button {:on-click (send! ui-channel (p/->Forward (* 32  1)))}   "Forward"]
+   [:button {:on-click (send! ui-channel (p/->Forward (* 32 -1)))}   "Backward"]
    [:button {:on-click (send! ui-channel (p/->Left))}                "Left"]
    [:button {:on-click (send! ui-channel (p/->Right))}               "Right"]
    [:button {:on-click (send! ui-channel (p/->Resize (/ 2)))}        "Half"]
@@ -35,9 +40,14 @@
 (defn process-channel [turtle-channel]
   (go (loop []
         (let [command (<! turtle-channel)]
-          (println command)
           (swap! app-state #(p/process-command command %))
           (recur)))))
+
+(defn transform-str [turtle]
+  (let [{:keys [position heading scale]} turtle
+        [x y] position
+        angle (p/heading->angle heading)]
+    (svg/transform-str position angle scale)))
 
 (defn board
   "an svg chessboard using a pixie turtle"
@@ -47,9 +57,9 @@
         _ (process-channel chan)]
     [:div
      (command-buttons chan)
-     [:svg {:width 800 :height 600}
+     [:svg {:width 200 :height 200}
       (svg/defs (svg/straight-arrow "arrow" 32))
-      (svg/use-path "#arrow" (svg/transform-str [16 16] 0 2))]]))
+      (svg/use-path "#arrow" (transform-str turtle))]]))
 
 (defcard-rg chessboard
   "a chessboard"
@@ -58,15 +68,8 @@
   {:inspect-data true :history true})
 
 (comment
+  (in-ns 'hello-devcards.chessboard)
   (board)
   ;;=>
-  [:div
-   [:svg {:width 800, :height 600}
-    [:defs [:g {:id "arrow"}
-            [:circle {:cx 0, :cy 0, :r 3}]
-            [:path {:d "M 0 0 l 16 0 l 2 2 l 0 -4 l -2 2 "}]]]
-    [:use {:xlink-href "#arrow",
-           :transform "translate(16,16) rotate(0) scale(2) ",
-           :stroke "black",
-           :fill "transparent"}]]]
+
   )

@@ -13,9 +13,9 @@
 
 (def heading->angle
   {:east 0
-   :north 90
+   :north -90
    :west 180
-   :south -90})
+   :south 90})
 
 (defrecord Forward [d])
 (defrecord Left [])
@@ -29,18 +29,18 @@
   (let [{:keys [position heading scale]} app]
     (match heading
            :east (update-in app [:position] #(v/sum % [(* scale d) 0]))
-           :west (update-in app [:position] #(v/sum % [(* scale d) 0]))
-           :north (update-in app [:position] #(v/sum % [0 (* scale d)]))
+           :west (update-in app [:position] #(v/sum % [(* scale d -1) 0]))
+           :north (update-in app [:position] #(v/sum % [0 (* scale d -1)]))
            :south (update-in app [:position] #(v/sum % [0 (* scale d)])))))
 
-(defn inc-heading [heading]
+(defn dec-heading [heading]
   (match heading
          :east :north
          :north :west
          :west :south
          :south :east))
 
-(defn dec-heading [heading]
+(defn inc-heading [heading]
   (match heading
          :east :south
          :south :west
