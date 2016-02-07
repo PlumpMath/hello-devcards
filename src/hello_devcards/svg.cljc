@@ -20,19 +20,12 @@
        "rotate(" angle ") "
        "scale(" scale ") "))
 
-(defn use-path [id transform]
+(defn use-path [id transform-str class-name]
   [:use {:xlink-href id
-         :transform transform
+         :class class-name
+         :transform transform-str
          :stroke "black"
          :fill "transparent"}])
-
-(comment
-  (require '[hello-devcards.svg] :reload)
-  (in-ns 'hello-devcards.svg)
-
-  (use-path "turtle-shell" (transform-str [0 0] 0 1))
-  ;;=> [:use {:xlink-href "turtle-shell", :transform "translate(0,0) rotate(0) scale(1) "}]
-  )
 
 ;; svg path components
 (defrecord M [point])
@@ -83,7 +76,7 @@
         v2 [0 (+ (- q) (- q))]
         v3 [q q]]
     (group-svg id
-               (circle origin 3)
+               [:circle {:cx 0 :cy 0 :r 3 :class "position"}]
                (path (reduce-path (->M origin)
                                   (->l tip)
                                   (->l v1)
@@ -98,7 +91,11 @@
    [:path {:d "M 40 0 Q 30 0 30 -10 Q 33 -5 30 0"}]])
 
 (comment
-  (->M [0 0])
+  (require '[hello-devcards.svg] :reload)
+  (in-ns 'hello-devcards.svg)
+
+  (use-path "turtle-shell" (transform-str [0 0] 0 1))(->M [0 0])
+  ;;=> [:use {:xlink-href "turtle-shell", :transform "translate(0,0) rotate(0) scale(1) "}]
   (straight-arrow "test" 8)
   ;;=> [:g {:id "test"} [:circle {:cx 0, :cy 0, :r 3}] [:path {:d "M 0 0l 6 0l 0 2l 8 0l 0 -2l 6 0"}]]
   )

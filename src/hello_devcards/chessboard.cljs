@@ -59,7 +59,7 @@
      (command-buttons chan)
      [:svg {:width 200 :height 200}
       (svg/defs (svg/straight-arrow "arrow" 32))
-      (svg/use-path "#arrow" (transform-str turtle))]]))
+      (svg/use-path "#arrow" (transform-str turtle) "turtle")]]))
 
 (defcard-rg chessboard
   "a chessboard"

@@ -1,1 +1,10 @@
 /* hello-devcards CSS */
+
+.turtle {
+    fill: green;
+}
+
+.position {
+    fill: yellow;
+    stroke: blue;
+}
