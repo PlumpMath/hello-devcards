@@ -11,3 +11,18 @@
 svg.board {
   margin: 32px;
 }
+button.command {
+    margin: 1px;
+    padding-top:    4px;
+    padding-bottom: 4px;
+    padding-left:   4px;
+    padding-right:  4px;
+}
+rect.white {
+    fill: grey;
+    stroke: none;
+}
+rect.black {
+    fill: red;
+    stroke: none;
+}

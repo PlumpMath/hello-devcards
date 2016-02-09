@@ -8,8 +8,7 @@
 (def init-app-state
   {:position [160 160]
    :heading :north
-   :scale 1
-   :resolution 320})
+   :scale 1})
 
 (def heading->angle
   {:east 0
@@ -28,8 +27,8 @@
 (defn move [app d]
   (let [{:keys [position heading scale]} app]
     (match heading
-           :east (update-in app [:position] #(v/sum % [(* scale d) 0]))
-           :west (update-in app [:position] #(v/sum % [(* scale d -1) 0]))
+           :east  (update-in app [:position] #(v/sum % [(* scale d) 0]))
+           :west  (update-in app [:position] #(v/sum % [(* scale d -1) 0]))
            :north (update-in app [:position] #(v/sum % [0 (* scale d -1)]))
            :south (update-in app [:position] #(v/sum % [0 (* scale d)])))))
 

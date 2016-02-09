@@ -83,6 +83,13 @@
                                   (->l v2)
                                   (->l v3))))))
 
+(defn square
+  [class-name position base]
+  (let [[x y] position]
+    [:rect {:class class-name
+            :x x :y y
+            :width base :height base}]))
+
 (def test-arrow
   [:g {:id "pixie"}
    [:line {:x1 0 :y1 0 :x2 30 :y2 0}]
@@ -98,4 +105,6 @@
   ;;=> [:use {:xlink-href "turtle-shell", :transform "translate(0,0) rotate(0) scale(1) "}]
   (straight-arrow "test" 8)
   ;;=> [:g {:id "test"} [:circle {:cx 0, :cy 0, :r 3}] [:path {:d "M 0 0l 6 0l 0 2l 8 0l 0 -2l 6 0"}]]
+  (square "white" [1 2] 32)
+  ;;=> [:rect {:class "white", :x 1, :y 2, :width 32, :height 32}]
   )
