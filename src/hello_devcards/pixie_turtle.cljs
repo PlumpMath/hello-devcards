@@ -55,7 +55,7 @@
         _ (process-channel chan)]
     [:div
      (command-buttons chan)
-     [:svg {:width resolution :height resolution}
+     [:svg {:width resolution :height resolution :class "board"}
       [:defs
        pixie-path]
       [:use {:xlink-href "#pixie"

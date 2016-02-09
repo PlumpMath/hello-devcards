@@ -8,3 +8,6 @@
     fill: yellow;
     stroke: blue;
 }
+svg.board {
+  margin: 32px;
+}

@@ -5,6 +5,41 @@
 ** pixie-turtle
    using simple turtle math
    and svg transformations
+** chessboard
+   https://www.chesscademy.com/train
+   http://www.chessgames.com/chesshelp.html#pgn
+   http://chess.about.com/od/tipsforbeginners/qt/ReadNotation.htm
+   http://www.uschess.org/content/blogsection/19/28/
+   https://en.wikipedia.org/wiki/Chess_piece
+   https://en.wikipedia.org/wiki/Chess_symbols_in_Unicode
+   http://www.opensource.apple.com/source/Chess/Chess-109.0.3/Documentation/PGN-Standard.txt
+
+   clojure
+   http://clojure.org/reference/reader
+
+   cljs.user=> \u2654
+   ;;=> "♔"
+
+   html
+   &#9812;
+
+   svg
+   http://all-free-download.com/free-vector/download/chess_board_and_pieces_57990_download.html
+
+   http://www.draw4free.com/tutorial/chess/resultPage.htm
+   http://www.draw4free.com/tutorial/chess/chess.svg
+
+   d3
+   http://stackoverflow.com/questions/27806132/how-to-draw-a-chess-board-in-d3
+   http://codepen.io/VividD/pen/bNgGKP
+
+   python
+   pychess
+   http://pychess.org/
+   https://github.com/pychess/pychess
+
+** chessgames
+   http://www.chessgames.com/perl/chesscollection?cid=1001601
 
 ** svg clipping path
    #+BEGIN_SRC xml

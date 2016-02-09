@@ -57,12 +57,14 @@
         _ (process-channel chan)]
     [:div
      (command-buttons chan)
-     [:svg {:width 200 :height 200}
+     [:svg {:width 200 :height 200 :class "board"}
       (svg/defs (svg/straight-arrow "arrow" 32))
       (svg/use-path "#arrow" (transform-str turtle) "turtle")]]))
 
 (defcard-rg chessboard
-  "a chessboard"
+  "a chessboard
+&#9812;
+"
   [board app-state]
   app-state
   {:inspect-data true :history true})
