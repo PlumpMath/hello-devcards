@@ -55,9 +55,19 @@
       (swap! app-state
             (fn [state]
               (let [turtle (:turtle state)
-                    {:keys [position scale]} turtle
+                    {:keys [position scale heading]} turtle
                     sq [position (* scale base) class]]
                 (add-square sq state)))))))
+
+(defn two-square [ui-channel base]
+  (go
+    (square ui-channel base "white")
+    (<! (timeout 1000))
+    (>! ui-channel (p/->Forward base))
+    (<! (timeout 100))
+    (square ui-channel base "black")
+    (<! (timeout 1000))
+    (>! ui-channel (p/->Forward base))))
 
 (defn command-buttons
   "gui with command buttons"
@@ -81,7 +91,13 @@
     "White Square"]
    [:button {:on-click #(square ui-channel base "black")
              :class "command"}
-    "Black Square"]])
+    "Black Square"]
+   [:button {:on-click #(two-square ui-channel base)
+             :class "command"}
+    "two square"]
+   [:button {:on-click #(two-square ui-channel base)
+             :class "command"}
+    "4 by 4"]])
 
 (defn process-channel [turtle-channel]
   (go (loop []
@@ -111,11 +127,12 @@
         squares (:squares app)
         chan (chan)
         _ (process-channel chan)
-        unit-length 32]
+        unit-length 32
+        resolution (* 4 32)]
     [:div
      (command-buttons chan unit-length)
      (program-buttons chan unit-length)
-     [:svg {:width 200 :height 200 :class "board"}
+     [:svg {:width resolution :height resolution :class "board"}
       (svg/defs
         (svg/straight-arrow "arrow" unit-length))
       (square-group squares)
