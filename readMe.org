@@ -6,15 +6,3 @@
 ** pixie-turtle
    an svg turtle using simple turtle math
    and svg transformations
-** chess
-*** chesspeice
-    clojure
-    http://clojure.org/reference/reader
-
-    #+BEGIN_SRC shell
-    cljs.user=> \u2654
-    ;;=> "♔"
-    #+END_SRC
-
-*** chessgames
-    http://www.chessgames.com/perl/chesscollection?cid=1001601
