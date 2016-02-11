@@ -15,10 +15,6 @@
                  [org.clojure/core.match "0.3.0-alpha4"]
                  [org.clojure/core.async "0.2.374"]
 
-                 [thi.ng/geom "0.0.908" :exclusions [org.clojure/tools.analyzer.jvm]]
-                 [thi.ng/color "1.0.0"]
-                 [thi.ng/strf "0.2.1"]
-
                  [complex/complex "0.1.9"]
 
                  [ring/ring-core "1.4.0"]
@@ -34,6 +30,7 @@
                           org.clojure/tools.reader]]]
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled"
+                                    "resources/public/js/pages"
                                     "target"]
 
   :source-paths ["src"]
@@ -55,11 +52,12 @@
                                    :output-to  "resources/public/js/compiled/hello_devcards.js"
                                    :output-dir "resources/public/js/compiled/out"
                                    :source-map-timestamp true }}
-                       {:id "prod"
-                        :source-paths ["src"]
-                        :compiler {:main       "hello-devcards.core"
-                                   :asset-path "js/compiled/out"
-                                   :output-to  "resources/public/js/compiled/hello_devcards.js"
+                       {:id "pages"
+                        :source-paths ["src" "pages-src"]
+                        :compiler {:main       "pages.core"
+                                   :devcards true
+                                   :asset-path "js/pages/out"
+                                   :output-to  "resources/public/js/pages/hello_devcards.js"
                                    :optimizations :advanced}}]}
 
   :figwheel { :css-dirs ["resources/public/css"] })

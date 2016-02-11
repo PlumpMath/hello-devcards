@@ -84,10 +84,11 @@
 (defn square-program [base color]
   (vector
    (->Pendown)
-   (->Repeat 4
-             [(p/->Forward base)
-              (p/->Right)
-              (->Pause 100)])
+   (flatten
+    (repeat 4
+            [(p/->Forward base)
+             (p/->Right)
+             (->Pause 100)]))
    (->ClosePoly color)))
 
 (defn four-square [base]
@@ -109,21 +110,11 @@
                   (p/->Forward base))))))
 
 (defn run-program [chan program]
-  (go (let [pc (fn pc [command]
-                 (cond
-                   (instance? Pause command) (go (<! (timeout 100)))
-                   (instance? Repeat command)
-                   (let [n (:n command)
-                         commands (:commands command)]
-                     (loop [n n]
-                       (when (> n 0)
-                         (doseq [c commands]
-                           (pc c))
-                         (recur (dec n)))))
-                   :else
-                   (go (>! chan command))))]
-        (doseq [command program]
-          (pc command)))))
+  (go
+    (doseq [command program]
+      (cond
+        (instance? Pause command) (<! (timeout 100))
+        :else (>! chan command)))))
 
 (defn command-button
   "a single command button"

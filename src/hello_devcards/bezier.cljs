@@ -4,10 +4,7 @@
    [complex.number :as n :refer [zero one i negative-one negative-i infinity add sub mult div]]
    [complex.vector :as v]
    [reagent.core :as reagent]
-   [sablono.core :as sab :include-macros true]
-   [thi.ng.geom.core :as g]
-   [thi.ng.geom.svg.core :as svg]
-   [thi.ng.color.core :as col])
+   [sablono.core :as sab :include-macros true])
   (:require-macros
    [reagent.ratom :as ratom :refer [reaction]]
    [devcards.core :as dc :refer [defcard deftest defcard-rg defcard-doc]]))
