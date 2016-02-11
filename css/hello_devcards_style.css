@@ -1,0 +1,40 @@
+/* hello-devcards CSS */
+
+.turtle {
+    fill: green;
+}
+
+.position {
+    fill: yellow;
+    stroke: blue;
+}
+svg.board {
+  margin: 32px;
+}
+button.command {
+    margin: 1px;
+    padding-top:    4px;
+    padding-bottom: 4px;
+    padding-left:   4px;
+    padding-right:  4px;
+}
+rect.white {
+    fill: grey;
+    stroke: black;
+}
+rect.black {
+    fill: black;
+    stroke: black;
+}
+polygon.white {
+    fill: grey;
+    stroke: black;
+}
+polygon.black {
+    fill: black;
+    stroke: black;
+}
+polyline {
+  stroke: black;
+  fill: none;
+}
