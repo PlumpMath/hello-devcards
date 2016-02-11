@@ -26,3 +26,15 @@ rect.black {
     fill: black;
     stroke: black;
 }
+polygon.white {
+    fill: grey;
+    stroke: black;
+}
+polygon.black {
+    fill: black;
+    stroke: black;
+}
+polyline {
+  stroke: black;
+  fill: none;
+}

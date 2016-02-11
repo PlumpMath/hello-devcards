@@ -20,8 +20,9 @@
   {:turtle init-turtle
    :polyline []
    :squares []
-   :lines []
-   :pen :up})
+   :pen :up
+   :base 32
+   :resolution (* 4 32)})
 
 (defn add-point [app point]
   (update-in app [:polyline] #(conj % point)))
@@ -62,9 +63,7 @@
       (if (= pen :down)
         (-> app
             (assoc-in [:pen] :up)
-            ;; flush polyline into lines
-            (assoc-in [:polyline] [])
-            )
+            (assoc-in [:polyline] []))
         app)))
   Pendown
   (process-command [_ app]
@@ -78,12 +77,12 @@
   ClosePoly
   (process-command [{c :c} app]
     (-> app
-        (add-square {:class c :points (drop-last (:polyline app))})
+        (add-square {:class-name c :points (drop-last (:polyline app))})
         (assoc-in [:polyline] [])
         (assoc-in [:pen] :up))))
 
 (defn square-program [base color]
-  (list
+  (vector
    (->Pendown)
    (->Repeat 4
              [(p/->Forward base)
@@ -91,26 +90,40 @@
               (->Pause 100)])
    (->ClosePoly color)))
 
-(defn process-program-command [chan]
-  (fn [command]
-    (cond
-      (instance? Delay command) (<! (timeout 100))
-      (instance? Repeat command)
-      (let [n (:n command)
-            commands (:commands command)]
-        (loop [n n]
-          (when (> n 0)
-            (doseq [c commands]
-              (cond
-                (instance? Delay command) (<! (timeout 100))
-                :else (>! chan command)))
-            (recur (dec n)))))
-      :else (>! chan command))))
+(defn four-square [base]
+  (flatten
+   (repeat 2
+           (concat
+            (conj (square-program base "white")
+                  (p/->Right))
+            (conj (square-program base "black")
+                  (p/->Right))))))
 
-(defn run-program [ui-channel program]
-  (let [command-fn (process-program-command ui-channel)]
-    (doseq [command program]
-      (command-fn command))))
+(defn row [base n]
+  (flatten
+   (repeat n
+           (concat
+            (conj (square-program base "white")
+                  (p/->Forward base))
+            (conj (square-program base "black")
+                  (p/->Forward base))))))
+
+(defn run-program [chan program]
+  (go (let [pc (fn pc [command]
+                 (cond
+                   (instance? Pause command) (go (<! (timeout 100)))
+                   (instance? Repeat command)
+                   (let [n (:n command)
+                         commands (:commands command)]
+                     (loop [n n]
+                       (when (> n 0)
+                         (doseq [c commands]
+                           (pc c))
+                         (recur (dec n)))))
+                   :else
+                   (go (>! chan command))))]
+        (doseq [command program]
+          (pc command)))))
 
 (defn command-button
   "a single command button"
@@ -131,16 +144,28 @@
     (into [:div]
           (map #(apply command-button ui-channel %) commands))))
 
+(defn reset-state []
+  (reset! app-state init-app-state))
+
 (defn program-buttons
   "program buttons"
   [ui-channel base]
   [:div
-   [:button {:on-click #(run-program ui-channel (square-program base :white))
+   [:button {:on-click #(run-program ui-channel (square-program base "white"))
              :class "command"}
     "White Square"]
-   [:button {:on-click #(run-program ui-channel (square-program base :black))
+   [:button {:on-click #(run-program ui-channel (square-program base "black"))
              :class "command"}
-    "Black Square"]])
+    "Black Square"]
+   [:button {:on-click #(run-program ui-channel (four-square base))
+             :class "command"}
+    "Four Square"]
+   [:button {:on-click #(run-program ui-channel (row base 1))
+             :class "command"}
+    "Two Row"]
+   [:button {:on-click #(reset-state)
+             :class "command"}
+    "reset"]])
 
 (defn pixie? [command]
   (satisfies? p/Command command))
@@ -151,16 +176,12 @@
   (let [{:keys [turtle polyline squares pen]} state]
     (if (pixie? command)
       (let [new-turtle (p/process-command command turtle)]
-        ;; if pendown? and command = Forward then add new position to polyline
         (if (and (= :down pen) (instance? p/Forward command))
           (-> state
               (assoc-in [:turtle] new-turtle)
               (add-point (:position new-turtle)))
           (assoc-in state [:turtle] new-turtle)))
-      (do
-        ;; handle non pixie commands
-        ;; the turtle itself does not get updated
-        (process-command command state)))))
+      (process-command command state))))
 
 (defn process-channel [turtle-channel]
   (go (loop []
@@ -169,8 +190,8 @@
           (recur)))))
 
 (defn svg-square
-  [[position scale class-name]]
-  (svg/square class-name position scale))
+  [{:keys [class-name points]}]
+  (apply svg/polygon class-name points))
 
 (defn square-group
   "make some svg squares in a group"
@@ -182,19 +203,17 @@
 (defn board
   "an svg chessboard using a pixie turtle"
   [app-atate]
-  (let [app @app-state
-        turtle (:turtle app)
-        squares (:squares app)
+  (let [{:keys [turtle squares polyline base resolution]} @app-state
         chan (chan)
-        _ (process-channel chan)
-        unit-length 32
-        resolution (* 4 32)]
+        _ (process-channel chan)]
     [:div
-     (command-buttons chan unit-length)
-     (program-buttons chan unit-length)
+     (command-buttons chan base)
+     (program-buttons chan base)
      [:svg {:width resolution :height resolution :class "board"}
       (svg/defs
-        (svg/straight-arrow "arrow" unit-length))
+        (svg/straight-arrow "arrow" base))
+      (when (not (empty? polyline))
+        (apply svg/polyline "lines" polyline))
       (square-group squares)
       (svg/use-path "#arrow" (transform-str turtle) "turtle")]]))
 
@@ -235,4 +254,5 @@
            (p/->Forward 1)
            (p/->Right)
            (->ClosePoly :white)])
-  )
+
+  (four-square 1))
