@@ -18,9 +18,15 @@
 
 (def init-app-state
   {:turtle init-turtle
-   :squares []})
+   :polyline []
+   :squares []
+   :lines []
+   :pen :up})
 
-(defn add-square [square app]
+(defn add-point [app point]
+  (update-in app [:polyline] #(conj % point)))
+
+(defn add-square [app square]
   (update-in app [:squares] #(conj % square)))
 
 (def app-state (reagent/atom init-app-state))
@@ -33,44 +39,87 @@
     (put! channel message)
     (.stopPropagation dom-event)))
 
-(defn command-button
-  "a single command button"
-  [ui-channel name command]
-  [:button {:on-click (send! ui-channel command)
-            :class "command"} name])
-
 (defn transform-str [turtle]
   (let [{:keys [position heading scale]} turtle
         [x y] position
         angle (p/heading->angle heading)]
     (svg/transform-str position angle scale)))
 
-(defn square [ui-channel base class]
-  (let [sq-prg (flatten (repeat 4 (list (p/->Forward base) (p/->Right))))]
-    (go
-      (doseq [command sq-prg]
-        (<! (timeout 100))
-        (>! ui-channel command))
-      (<! (timeout 100))
-      (swap! app-state
-            (fn [state]
-              (let [turtle (:turtle state)
-                    {:keys [position scale heading]} turtle
-                    sq [position (* scale base) class]]
-                (add-square sq state)))))))
+(defrecord Penup [])
+(defrecord Pendown [])
+(defrecord ClosePoly [c])
 
-(defn two-square [ui-channel base]
-  (go
-    (square ui-channel base "white")
-    (<! (timeout 1000))
-    (>! ui-channel (p/->Forward base))
-    (<! (timeout 100))
-    (square ui-channel base "black")
-    (<! (timeout 1000))
-    (>! ui-channel (p/->Forward base))))
+(defrecord Repeat [n commands])
+(defrecord Pause [s])
+
+(defprotocol ChessCommand
+  (process-command [command app-state]))
+
+(extend-protocol ChessCommand
+  Penup
+  (process-command [_ app]
+    (let [pen (:pen app)]
+      (if (= pen :down)
+        (-> app
+            (assoc-in [:pen] :up)
+            ;; flush polyline into lines
+            (assoc-in [:polyline] [])
+            )
+        app)))
+  Pendown
+  (process-command [_ app]
+    (let [{:keys [turtle pen polyline]} app]
+      ;; do nothing if pen is already down
+      (if (= pen :up)
+        (-> app
+            (assoc-in [:pen] :down)
+            (assoc-in [:polyline] [(:position turtle)]))
+        app)))
+  ClosePoly
+  (process-command [{c :c} app]
+    (-> app
+        (add-square {:class c :points (drop-last (:polyline app))})
+        (assoc-in [:polyline] [])
+        (assoc-in [:pen] :up))))
+
+(defn square-program [base color]
+  (list
+   (->Pendown)
+   (->Repeat 4
+             [(p/->Forward base)
+              (p/->Right)
+              (->Pause 100)])
+   (->ClosePoly color)))
+
+(defn process-program-command [chan]
+  (fn [command]
+    (cond
+      (instance? Delay command) (<! (timeout 100))
+      (instance? Repeat command)
+      (let [n (:n command)
+            commands (:commands command)]
+        (loop [n n]
+          (when (> n 0)
+            (doseq [c commands]
+              (cond
+                (instance? Delay command) (<! (timeout 100))
+                :else (>! chan command)))
+            (recur (dec n)))))
+      :else (>! chan command))))
+
+(defn run-program [ui-channel program]
+  (let [command-fn (process-program-command ui-channel)]
+    (doseq [command program]
+      (command-fn command))))
+
+(defn command-button
+  "a single command button"
+  [ui-channel name command]
+  [:button {:on-click (send! ui-channel command)
+            :class "command"} name])
 
 (defn command-buttons
-  "gui with command buttons"
+  "gui for command buttons"
   [ui-channel base]
   (let [commands
         [["Forward"  (p/->Forward (* base  1))]
@@ -86,26 +135,37 @@
   "program buttons"
   [ui-channel base]
   [:div
-   [:button {:on-click #(square ui-channel base "white")
+   [:button {:on-click #(run-program ui-channel (square-program base :white))
              :class "command"}
     "White Square"]
-   [:button {:on-click #(square ui-channel base "black")
+   [:button {:on-click #(run-program ui-channel (square-program base :black))
              :class "command"}
-    "Black Square"]
-   [:button {:on-click #(two-square ui-channel base)
-             :class "command"}
-    "two square"]
-   [:button {:on-click #(two-square ui-channel base)
-             :class "command"}
-    "4 by 4"]])
+    "Black Square"]])
+
+(defn pixie? [command]
+  (satisfies? p/Command command))
+
+(defn update-state
+  "return new state for given command"
+  [state command]
+  (let [{:keys [turtle polyline squares pen]} state]
+    (if (pixie? command)
+      (let [new-turtle (p/process-command command turtle)]
+        ;; if pendown? and command = Forward then add new position to polyline
+        (if (and (= :down pen) (instance? p/Forward command))
+          (-> state
+              (assoc-in [:turtle] new-turtle)
+              (add-point (:position new-turtle)))
+          (assoc-in state [:turtle] new-turtle)))
+      (do
+        ;; handle non pixie commands
+        ;; the turtle itself does not get updated
+        (process-command command state)))))
 
 (defn process-channel [turtle-channel]
   (go (loop []
-        (let [command (<! turtle-channel)
-              p-fn (fn [turtle] (p/process-command command turtle))]
-          (swap! app-state
-                 (fn [app]
-                   (update-in app [:turtle] p-fn)))
+        (let [command (<! turtle-channel)]
+          (swap! app-state #(update-state % command))
           (recur)))))
 
 (defn svg-square
@@ -152,4 +212,27 @@
   ;;=>
   @app-state
   ;;=> {:turtle {:position [20 40], :heading :east, :scale 1}, :squares []}
+
+  (square-program 1)
+
+  (update-state init-app-state (p/->Forward 1))
+  (update-state init-app-state (->Pendown))
+  (reduce update-state init-app-state
+          [(->Pendown)
+           (p/->Forward 1)])
+  (reduce update-state init-app-state
+          [(->Pendown)
+           (p/->Forward 1)
+           (->Penup)])
+  (reduce update-state init-app-state
+          [(->Pendown)
+           (p/->Forward 1)
+           (p/->Right)
+           (p/->Forward 1)
+           (p/->Right)
+           (p/->Forward 1)
+           (p/->Right)
+           (p/->Forward 1)
+           (p/->Right)
+           (->ClosePoly :white)])
   )

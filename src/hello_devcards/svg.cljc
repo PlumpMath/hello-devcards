@@ -90,6 +90,22 @@
             :x x :y y
             :width base :height base}]))
 
+(defn point-str [[x y]]
+  (str x "," y))
+
+(defn points-str [& points]
+  (clojure.string/join " " (map point-str points)))
+
+(defn polygon
+  [class-name & points]
+  [:polygon {:points (apply points-str points)
+             :class class-name}])
+
+(defn polyline
+  [class-name & points]
+  [:polyline {:points (apply points-str points)
+             :class class-name}])
+
 (def test-arrow
   [:g {:id "pixie"}
    [:line {:x1 0 :y1 0 :x2 30 :y2 0}]
@@ -107,4 +123,6 @@
   ;;=> [:g {:id "test"} [:circle {:cx 0, :cy 0, :r 3}] [:path {:d "M 0 0l 6 0l 0 2l 8 0l 0 -2l 6 0"}]]
   (square "white" [1 2] 32)
   ;;=> [:rect {:class "white", :x 1, :y 2, :width 32, :height 32}]
+  (polygon "white" [1 2] [3 4] [5 6])
+  ;;=> [:polygon {:points "1,2 3,4 5,6", :class "white"}]
   )
