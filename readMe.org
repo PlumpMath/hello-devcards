@@ -1,6 +1,7 @@
 * hello devcards
 ** usage
    lein figwheel
+
    http://localhost:3449/cards.html
 ** pixie-turtle
    using simple turtle math
@@ -87,30 +88,6 @@
 ** react-state-stream
    react animation on steroids
    https://github.com/chenglou/react-state-stream
-** thi-ng geom-svg
-   https://github.com/thi-ng/geom/blob/master/geom-svg/src/core.org#svg-conversions-for-geomtypes
-
-** parinfer
-   Let's simplify the way we write Lisp
-
-   https://shaunlebron.github.io/parinfer/#editor-plugins
-** om auto complete widget
-   https://github.com/omcljs/om/wiki/Remote-Synchronization-Tutorial#building-a-simple-auto-completion-widget
-** om next demo
-   https://github.com/swannodette/om-next-demo
-** analemma
-   calc
-   http://www.wsanford.com/~wsanford/exo/sundials/analemma_calc.html
-
-   svg
-   https://github.com/liebke/analemma/blob/master/src/analemma/svg.clj
-
-** sundials
-   http://sundialsoc.org.uk/discussions/how-do-sundials-work/
-
-** ws-ldn
-   file:///Users/wbabic/dev/clojurescript/ws-ldn-1/resources/public/index.html
-
 ** nine men's morris
    https://en.wikipedia.org/wiki/Nine_Men%27s_Morris
    http://library.msri.org/books/Book29/files/gasser.pdf
