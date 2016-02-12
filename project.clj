@@ -4,9 +4,9 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
-  :dependencies [[org.clojure/clojure "1.7.0"]
-                 [org.clojure/clojurescript "1.7.170"]
-                 [org.clojure/tools.reader "1.0.0-alpha1"]
+  :dependencies [[org.clojure/clojure "1.8.0"]
+                 [org.clojure/clojurescript "1.7.228"]
+                 [org.clojure/tools.reader "1.0.0-alpha2"]
                  [org.clojure/tools.analyzer.jvm "0.6.9"]
                  [devcards "0.2.1-6" :exclusions [org.clojure/tools.reader]]
                  [sablono "0.5.3"]
@@ -44,14 +44,6 @@
                                     :output-to  "resources/public/js/compiled/hello_devcards_devcards.js"
                                     :output-dir "resources/public/js/compiled/devcards_out"
                                     :source-map-timestamp true }}
-                       {:id "dev"
-                        :source-paths ["src"]
-                        :figwheel true
-                        :compiler {:main       "hello-devcards.core"
-                                   :asset-path "js/compiled/out"
-                                   :output-to  "resources/public/js/compiled/hello_devcards.js"
-                                   :output-dir "resources/public/js/compiled/out"
-                                   :source-map-timestamp true }}
                        {:id "pages"
                         :source-paths ["src" "pages-src"]
                         :compiler {:main       "pages.core"
