@@ -8,10 +8,10 @@
                  [org.clojure/clojurescript "1.7.170"]
                  [org.clojure/tools.reader "1.0.0-alpha1"]
                  [org.clojure/tools.analyzer.jvm "0.6.9"]
-                 [devcards "0.2.1-5" :exclusions [org.clojure/tools.reader]]
+                 [devcards "0.2.1-6" :exclusions [org.clojure/tools.reader]]
                  [sablono "0.5.3"]
-                 [org.omcljs/om "0.9.0"]
                  [reagent "0.5.1"]
+
                  [org.clojure/core.match "0.3.0-alpha4"]
                  [org.clojure/core.async "0.2.374"]
 
@@ -24,7 +24,7 @@
                  [timothypratley/reanimated "0.1.1"]]
 
   :plugins [[lein-cljsbuild "1.1.2"]
-            [lein-figwheel "0.5.0-3"
+            [lein-figwheel "0.5.0-6"
              :exclusions [org.clojure/clojure
                           ring/ring-core joda-time
                           org.clojure/tools.reader]]]

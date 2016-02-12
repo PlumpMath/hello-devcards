@@ -50,7 +50,6 @@
 (defrecord Pendown [])
 (defrecord ClosePoly [c])
 
-(defrecord Repeat [n commands])
 (defrecord Pause [s])
 
 (defprotocol ChessCommand
@@ -109,6 +108,16 @@
             (conj (square-program base "black")
                   (p/->Forward base))))))
 
+(defn two-row [base n]
+  (concat
+   (row base n)
+   (list (p/->Right) (p/->Forward (* 2 base)) (p/->Right))
+   (row base n)
+   (list (p/->Right)(p/->Right))))
+
+(defn four-row [base row-length]
+  (flatten (repeat 2 (two-row base row-length))))
+
 (defn run-program [chan program]
   (go
     (doseq [command program]
@@ -151,9 +160,15 @@
    [:button {:on-click #(run-program ui-channel (four-square base))
              :class "command"}
     "Four Square"]
-   [:button {:on-click #(run-program ui-channel (row base 1))
+   [:button {:on-click #(run-program ui-channel (row base 2))
              :class "command"}
-    "Two Row"]
+    "Two in a Row"]
+   [:button {:on-click #(run-program ui-channel (two-row base 2))
+             :class "command"}
+    "Two Rows"]
+   [:button {:on-click #(run-program ui-channel (four-row base 2))
+             :class "command"}
+    "four Rows"]
    [:button {:on-click #(reset-state)
              :class "command"}
     "reset"]])
