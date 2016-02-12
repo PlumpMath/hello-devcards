@@ -81,14 +81,15 @@
         (assoc-in [:pen] :up))))
 
 (defn square-program [base color]
-  (vector
-   (->Pendown)
-   (flatten
-    (repeat 4
-            [(p/->Forward base)
-             (p/->Right)
-             (->Pause 100)]))
-   (->ClosePoly color)))
+  (vec (flatten
+           (list
+            (->Pendown)
+            (flatten
+             (repeat 4
+                     [(p/->Forward base)
+                      (p/->Right)
+                      (->Pause 100)]))
+            (->ClosePoly color)))))
 
 (defn four-square [base]
   (flatten
@@ -238,7 +239,7 @@
   @app-state
   ;;=> {:turtle {:position [20 40], :heading :east, :scale 1}, :squares []}
 
-  (square-program 1)
+  (square-program 1 "white")
 
   (update-state init-app-state (p/->Forward 1))
   (update-state init-app-state (->Pendown))
