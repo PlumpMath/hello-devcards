@@ -1,6 +1,6 @@
 (defproject hello-devcards "0.1.0-SNAPSHOT"
   :description "Hello Devcards"
-  :url "http://wbabic.github.io"
+  :url "http://wbabic.github.io/hello-devcards"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
@@ -8,6 +8,7 @@
                  [org.clojure/clojurescript "1.7.228"]
                  [org.clojure/tools.reader "1.0.0-alpha2"]
                  [org.clojure/tools.analyzer.jvm "0.6.9"]
+
                  [devcards "0.2.1-6" :exclusions [org.clojure/tools.reader]]
                  [sablono "0.5.3"]
                  [reagent "0.5.1"]
@@ -20,7 +21,6 @@
                  [ring/ring-core "1.4.0"]
                  [clj-time "0.9.0"]
 
-                 ;; for fun
                  [timothypratley/reanimated "0.1.1"]]
 
   :plugins [[lein-cljsbuild "1.1.2"]
@@ -49,7 +49,7 @@
                         :compiler {:main       "pages.core"
                                    :devcards true
                                    :asset-path "js/pages/out"
-                                   :output-to  "resources/public/js/pages/hello_devcards.js"
+                                   :output-to  "resources/public/js/pages/devcards.js"
                                    :optimizations :advanced}}]}
 
   :figwheel { :css-dirs ["resources/public/css"] })

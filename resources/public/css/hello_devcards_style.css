@@ -3,7 +3,6 @@
 .turtle {
     fill: green;
 }
-
 .position {
     fill: yellow;
     stroke: blue;
@@ -37,4 +36,12 @@ polygon.black {
 polyline {
   stroke: black;
   fill: none;
+}
+g#turtle {
+  stroke: black;
+  fill: yellow;
+}
+polygon.red {
+  fill: red;
+  stroke: none
 }

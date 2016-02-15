@@ -6,6 +6,7 @@
    [hello-devcards.bezier]
    [hello-devcards.pixie-turtle]
    [hello-devcards.chessboard]
+   [hello-devcards.color-wheel]
    [reagent.core :as reagent]
    [timothypratley.reanimated.core :as anim]
    [sablono.core :as sab :include-macros true])
