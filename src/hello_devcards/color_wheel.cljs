@@ -149,7 +149,7 @@
         points (:points a)
         polygons (:polygons a)]
     [:div
-     (command-buttons chan button-set-2)
+     (command-buttons chan button-set-1)
      (program-buttons chan)
      [:svg {:width resolution :height resolution :class "board"}
       (when (not (empty? points))
@@ -214,6 +214,47 @@
   (fn [app _] [color-wheel-one app])
   (reagent/atom initial-app-state)
   {:inspect-data true :history true})
+
+(def color-wheel-button-set-two
+  [["Left15"     (polygon/->Turn 15)]
+   ["Right15"    (polygon/->Turn -15)]
+   ["In"       (polygon/->In)]
+   ["Out"      (polygon/->Out)]])
+
+(defn color-wheel-program-buttons-two
+  "program buttons"
+  [chan]
+  [:div
+   [:button {:on-click #(run-program chan (polygon/section 24))
+             :class "command"}
+    "Section"]
+   [:button {:on-click #(run-program chan (polygon/wheel 24))
+             :class "command"}
+    "Wheel"]])
+
+(defn color-wheel-two
+  [app-state]
+  (let [app @app-state
+        {:keys [resolution turtle]} app
+        chan (chan)
+        _ (process-channel chan app-state)
+        f (mappings/eigth resolution)
+        a (polygon/transform-state f app)
+        points (:points a)
+        polygons (:polygons a)]
+    [:div
+     (command-buttons chan color-wheel-button-set-two)
+     (color-wheel-program-buttons-two chan)
+     [:svg {:width resolution :height resolution :class "board"}
+      (when (not (empty? points))
+        (apply svg/polyline "lines" points))
+      (section-group polygons)
+      (svg-turtle (:turtle a))]]))
+
+(defcard-rg twenty-four-step-color-wheel
+  "24 step color wheel"
+  (fn [app _] [color-wheel-two app])
+  (reagent/atom initial-app-state))
 
 (comment
   (in-ns 'hello-devcards.color-wheel)

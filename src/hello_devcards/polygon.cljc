@@ -64,6 +64,32 @@
      (->Pause 100)
      (->CloseSection))))
 
+(defn section-no-delay
+  "an n-fold section"
+  [n]
+  (let [a (/ 360 n)]
+    (list
+     (->BeginPoly)
+     (->Turn a)
+     (->Point)
+     (->Out)
+     (->Point)
+     (->Pause 100)
+     (->Turn (- a))
+     (->Point)
+     (->In)
+     (->Point)
+     (->CloseSection))))
+
+(defn wheel [n]
+  "an n-fold wheel"
+  (let [a (/ 360 n)]
+    (flatten
+     (repeat n
+             (list (section-no-delay n)
+                   (->Turn a)
+                   (->Pause 10))))))
+
 (defn start-poly [state]
   (let [turtle (:turtle state)]
     (-> state
