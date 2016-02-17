@@ -34,7 +34,7 @@ polygon.black {
     stroke: black;
 }
 polyline {
-  stroke: black;
+  stroke: grey;
   fill: none;
 }
 g#turtle {
@@ -42,6 +42,6 @@ g#turtle {
   fill: yellow;
 }
 polygon.red {
-  fill: red;
-  stroke: none
+  fill: transparent;
+  stroke: black;
 }

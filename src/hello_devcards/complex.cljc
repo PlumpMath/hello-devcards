@@ -46,10 +46,45 @@
              (fn [length]
                (* s length))))
 
+(defn in
+  "decrease length by one as long as length is greater than one"
+  [turtle]
+  (let [length (:length turtle)]
+    (if (> length 1)
+      (update-in turtle [:length] dec)
+      turtle)))
+
+(defn out
+  "increase length by one as long as length is greater than one"
+  [turtle]
+  (let [length (:length turtle)]
+    (update-in turtle [:length] inc)))
+
+(defn length->lightness [length]
+  (cond
+    (= 1 length) "40%"
+    (= 2 length) "50%"
+    (= 2 length) "60%"
+    :else "70%"))
+
+(defn color
+  "return an hsl color string based on position of given turtle"
+  [turtle]
+  (let [{:keys [length angle]} turtle
+        hue (mod angle 360)
+        lightness (length->lightness length)]
+    (str "hsl(" hue ", 100%, " lightness  ")")))
+
 (comment
   (in-ns 'hello-devcards.complex)
   (-> initial-turtle (resize 2) (turn 90) (move 2))
   ;;=> {:position #complex.number.complex{:x 1, :y 2}, :length 2, :angle 90}
 
   (-> initial-turtle (resize 2) (turn 45) (move 2))
+  (-> initial-turtle in)
+  (-> initial-turtle out out out)
+
+  (color initial-turtle)
+  (color (turn initial-turtle -15))
+  (color (-> initial-turtle out out))
   )

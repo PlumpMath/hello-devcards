@@ -101,6 +101,12 @@
   [:polygon {:points (apply points-str points)
              :class class-name}])
 
+(defn section
+  [color points]
+  [:polygon {:points (apply points-str points)
+             :fill color
+             :stroke "grey"}])
+
 (defn polyline
   [class-name & points]
   [:polyline {:points (apply points-str points)

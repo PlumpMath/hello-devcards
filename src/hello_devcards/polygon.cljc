@@ -23,14 +23,17 @@
 (defrecord BeginPoly [])
 (defrecord Point [])
 (defrecord ClosePoly [fill])
-
+(defrecord CloseSection [])
 (defrecord Forward [d])
 (defrecord Turn [a])
 (defrecord Resize [s])
-
+(defrecord In [])
+(defrecord Out [])
 (defrecord Pause [delay])
 
-(defn poly [n]
+(defn poly
+  "turtle program for drawing a regular polygon"
+  [n]
   (let [a (/ 360 n)]
     (flatten
      (list
@@ -40,6 +43,26 @@
                     (->Point)
                     (->Pause 100)))
       (->ClosePoly "red")))))
+
+(defn section
+  "an n-fold section"
+  [n]
+  (let [a (/ 360 n)]
+    (list
+     (->BeginPoly)
+     (->Turn a)
+     (->Point)
+     (->Pause 100)
+     (->Out)
+     (->Point)
+     (->Pause 100)
+     (->Turn (- a))
+     (->Point)
+     (->Pause 100)
+     (->In)
+     (->Point)
+     (->Pause 100)
+     (->CloseSection))))
 
 (defn start-poly [state]
   (let [turtle (:turtle state)]
@@ -56,8 +79,16 @@
 (defn close-poly [state class-name]
   (-> state
       (update-in [:polygons]
-                #(conj % {:class-name class-name
-                          :points (drop-last (:points state))}))
+                 #(conj % {:class-name class-name
+                           :points (drop-last (:points state))}))
+      (assoc-in [:points] [])))
+
+(defn close-section [state]
+  (-> state
+      (update-in [:polygons]
+                 #(conj % {:color (turtle/color (:turtle state))
+                           :class-name "section"
+                           :points (drop-last (:points state))}))
       (assoc-in [:points] [])))
 
 (defprotocol CommandProcessor
@@ -73,6 +104,12 @@
   Resize
   (process-command [{s :s} state]
     (update-in state [:turtle] #(turtle/resize % s)))
+  In
+  (process-command [_ state]
+    (update-in state [:turtle] turtle/in))
+  Out
+  (process-command [_ state]
+    (update-in state [:turtle] turtle/out))
   BeginPoly
   (process-command [_ state]
     (start-poly state))
@@ -82,6 +119,9 @@
   ClosePoly
   (process-command [{fill :fill} state]
     (close-poly state fill))
+  CloseSection
+  (process-command [_ state]
+    (close-section state))
   Pause
   (process-command [_ state] state))
 
