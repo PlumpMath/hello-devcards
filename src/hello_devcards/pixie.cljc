@@ -7,8 +7,9 @@
 
 (def init-app-state
   {:position [160 160]
-   :heading :north
-   :scale 1})
+   :heading :east
+   :scale 1
+   :resolution 320})
 
 (def heading->angle
   {:east 0

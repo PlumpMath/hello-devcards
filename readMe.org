@@ -7,6 +7,9 @@
      http://localhost:3449/cards.html
    #+END_SRC
 
+   This requires my complex library which is not yet in clojars.
+
+   https://github.com/wbabic/complex
 ** pixie-turtle
    A restricted svg turtle using simple turtle math
    involving addition and multiplication of whole numbers,
@@ -24,7 +27,7 @@
    Turtle commands and program to makes regular polygons.
 
 ** color wheel
-   A color Wheel made using a complex turtle, polygon and svg.
+   A color wheel made using a complex turtle, polygon and svg.
 
 ** colored polygon
    TODO
@@ -36,6 +39,7 @@
 
 ** lattice
    TODO
+
    The pixie turtle could handle a square lattice
    but not the other types.
 
