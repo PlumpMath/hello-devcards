@@ -5,7 +5,8 @@
 (def initial-app-state
   {:turtle turtle/initial-turtle
    :points []
-   :polygons []})
+   :polygons []
+   :current-color "grey"})
 
 (defn transform-state
   "transform state using f, a function of complex number
@@ -25,7 +26,7 @@ from user space into screen coordinates"
 
 (defrecord BeginPoly [])
 (defrecord Point [])
-(defrecord ClosePoly [fill])
+(defrecord ClosePoly [])
 (defrecord CloseSection [])
 (defrecord Forward [d])
 (defrecord Turn [a])
@@ -45,7 +46,7 @@ from user space into screen coordinates"
               (list (->Turn a)
                     (->Point)
                     (->Pause 100)))
-      (->ClosePoly "red")))))
+      (->ClosePoly)))))
 
 (defn section
   "an n-fold section"
@@ -105,10 +106,11 @@ from user space into screen coordinates"
         (update-in [:points]
                    #(conj % tip)))))
 
-(defn close-poly [state class-name]
+(defn close-poly [state]
   (-> state
       (update-in [:polygons]
-                 #(conj % {:class-name class-name
+                 #(conj % {:class-name "polygon"
+                           :color (:current-color state)
                            :points (drop-last (:points state))}))
       (assoc-in [:points] [])))
 
@@ -146,8 +148,8 @@ from user space into screen coordinates"
   (process-command [_ state]
     (add-point state))
   ClosePoly
-  (process-command [{fill :fill} state]
-    (close-poly state fill))
+  (process-command [_ state]
+    (close-poly state))
   CloseSection
   (process-command [_ state]
     (close-section state))
@@ -163,7 +165,7 @@ from user space into screen coordinates"
   (-> initial-app-state
       start-poly
       add-point
-      (close-poly "red"))
+      close-poly)
 
   (reduce
    (fn [state command]

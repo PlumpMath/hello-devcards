@@ -122,8 +122,8 @@
                  (svg/circle (:position turtle) 3)
                  (svg/line (:position turtle) (:tip turtle))))
 
-(defn polygon [{:keys [class-name points]}]
-  (apply svg/polygon class-name points))
+(defn polygon [{:keys [class-name color points]}]
+  (apply svg/polygon class-name color points))
 
 (defn section [{:keys [color points]}]
   (svg/section color points))
@@ -180,12 +180,6 @@
   "program buttons"
   [chan]
   [:div
-   [:button {:on-click #(run-program chan (polygon/poly 6))
-             :class "command"}
-    "Hexagon"]
-   [:button {:on-click #(run-program chan (polygon/poly 12))
-             :class "command"}
-    "Dodecagon"]
    [:button {:on-click #(run-program chan (polygon/section 12))
              :class "command"}
     "Section"]])
@@ -279,6 +273,15 @@
                  (polygon/process-command command state))
                initial-app-state
                (polygon/poly 4))
+        t-state (polygon/transform-state f state)]
+    (:polygons t-state))
+
+  (let [f (mappings/eigth 320)
+        state (reduce
+               (fn [state command]
+                 (polygon/process-command command state))
+               initial-app-state
+               (polygon/section 4))
         t-state (polygon/transform-state f state)]
     (:polygons t-state))
   )

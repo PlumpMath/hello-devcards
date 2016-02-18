@@ -97,9 +97,14 @@
   (clojure.string/join " " (map point-str points)))
 
 (defn polygon
-  [class-name & points]
-  [:polygon {:points (apply points-str points)
-             :class class-name}])
+  [class-name color & points]
+  (if (nil? color)
+    [:polygon {:points (apply points-str points)
+               :class class-name}]
+    [:polygon {:points (apply points-str points)
+               :class class-name
+               :fill color
+               :stroke "black"}]))
 
 (defn section
   [color points]
