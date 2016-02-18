@@ -1,8 +1,42 @@
 * hello devcards
 ** usage
-   lein figwheel
+   #+BEGIN_SRC shell
+     lein figwheel
 
-   http://localhost:3449/cards.html
+     http://localhost:3449/cards.html
+   #+END_SRC
+
 ** pixie-turtle
-   an svg turtle using simple turtle math
-   and svg transformations
+   A restricted svg turtle using simple turtle math
+   involving addition and multiplication of whole numbers,
+   halving and doubling,
+   left and right 90 degree turns
+   and is implemented directly in screen coordinates,
+   making use of svg transformations.
+
+** complex turtle
+   A turtle implemented using complex numbers.
+
+   A mapping transforms the turtle into screen coordinates.
+
+** polygon
+   Turtle commands and program to makes regular polygons.
+
+** color wheel
+   A color Wheel made using a complex turtle, polygon and svg.
+
+** colored polygon
+   TODO
+
+   Use polygon and color-wheel
+   so that color-wheel manages the current color and
+   when polygons are closed,
+   the current color is used as the fill color of the polygon.
+
+** lattice
+   TODO
+   The pixie turtle could handle a square lattice
+   but not the other types.
+
+   So, this will make use of polygon with a complex turtle
+   that is mapped to screen space.
