@@ -190,7 +190,7 @@
           (assoc-in state [:turtle] new-turtle)))
       (process-command command state))))
 
-(defn process-channel [turtle-channel]
+(defn process-channel [turtle-channel app-state]
   (go (loop []
         (let [command (<! turtle-channel)]
           (swap! app-state #(update-state % command))
@@ -209,10 +209,10 @@
 
 (defn board
   "an svg chessboard using a pixie turtle"
-  [app-atate]
+  [app-state]
   (let [{:keys [turtle squares polyline base resolution]} @app-state
         chan (chan)
-        _ (process-channel chan)]
+        _ (process-channel chan app-state)]
     [:div
      (command-buttons chan base)
      (program-buttons chan base)
@@ -224,13 +224,22 @@
       (square-group squares)
       (svg/use-path "#arrow" (transform-str turtle) "turtle")]]))
 
-(defcard-rg chessboard
+(defcard-rg chessboard-squares
   "Lets build a chessboard, one square at a time, turtle style
 &#9812;
 "
   [board app-state]
   app-state
   {:inspect-data true :history true})
+
+(defcard-rg chessboard
+  "Lets build a chessboard, one square at a time, turtle style
+&#9812;
+"
+  (fn [app _]
+    [board app-state])
+  (reagent/atom init-app-state)
+  )
 
 (comment
   (in-ns 'hello-devcards.chessboard)

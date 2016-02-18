@@ -7,7 +7,10 @@
    :points []
    :polygons []})
 
-(defn transform-state [f state]
+(defn transform-state
+  "transform state using f, a function of complex number
+from user space into screen coordinates"
+  [f state]
   (-> state
       (update-in [:turtle] #(turtle/transform-turtle f %))
       (update-in [:points] #(mapv f %))

@@ -62,10 +62,10 @@
 
 (defn length->lightness [length]
   (cond
-    (= 1 length) "40%"
+    (= 1 length) "70%"
     (= 2 length) "50%"
-    (= 2 length) "60%"
-    :else "70%"))
+    (= 3 length) "40%"
+    :else "30%"))
 
 (defn color
   "return an hsl color string based on position of given turtle"
