@@ -1,4 +1,5 @@
 * hello devcards
+  An exploration of turtle programming using svg, reagent and devcards.
 ** usage
    #+BEGIN_SRC shell
      lein figwheel
