@@ -50,22 +50,27 @@
   "decrease length by one as long as length is greater than one"
   [turtle]
   (let [length (:length turtle)]
-    (if (> length 1)
-      (update-in turtle [:length] dec)
-      turtle)))
+    (cond
+      (> length 1) (update-in turtle [:length] dec)
+      (= length 1) (assoc-in turtle [:length] (/ 2))
+      :else turtle)))
 
 (defn out
   "increase length by one as long as length is greater than one"
   [turtle]
   (let [length (:length turtle)]
-    (update-in turtle [:length] inc)))
+    (cond
+      (< length 1) (assoc-in turtle [:length] 1)
+      :else (update-in turtle [:length] inc))))
 
 (defn length->lightness [length]
   (cond
+    (< length 1) "80%"
     (= 1 length) "70%"
     (= 2 length) "50%"
     (= 3 length) "40%"
-    :else "30%"))
+    (= 4 length) "30%"
+    :else "20%"))
 
 (defn color
   "return an hsl color string based on position of given turtle"
