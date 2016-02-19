@@ -7,6 +7,7 @@
    [hello-devcards.pixie-turtle]
    [hello-devcards.chessboard]
    [hello-devcards.color-wheel]
+   [hello-devcards.colored-polygon]
    [reagent.core :as reagent]
    [timothypratley.reanimated.core :as anim]
    [sablono.core :as sab :include-macros true])

@@ -94,6 +94,18 @@ from user space into screen coordinates"
                    (->Turn a)
                    (->Pause 10))))))
 
+(defn full-wheel [n]
+  "an n-fold wheel"
+  (let [a (/ 360 n)]
+    (flatten (list
+              (->In)
+              (wheel n)
+              (repeat 5
+                      (list
+                       (->Out)
+                       (wheel n)))
+              (repeat 4 (->In))))))
+
 (defn start-poly [state]
   (let [turtle (:turtle state)]
     (-> state
@@ -114,7 +126,9 @@ from user space into screen coordinates"
                            :points (drop-last (:points state))}))
       (assoc-in [:points] [])))
 
-(defn close-section [state]
+(defn close-section
+  "color determined by the state of the tutle"
+  [state]
   (-> state
       (update-in [:polygons]
                  #(conj % {:color (turtle/color (:turtle state))
