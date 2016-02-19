@@ -5,7 +5,8 @@
    [hello-devcards.bezier]
    [hello-devcards.pixie-turtle]
    [hello-devcards.chessboard]
-   [hello-devcards.color-wheel])
+   [hello-devcards.color-wheel]
+   [hello-devcards.colored-polygon])
   (:require-macros
    [devcards.core :as dc :refer [defcard deftest defcard-rg defcard-doc]]))
 
