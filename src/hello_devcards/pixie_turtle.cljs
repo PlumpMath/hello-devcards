@@ -65,6 +65,38 @@
              :stroke "purple"
              :fill "orange"}]]]))
 
+(defcard story
+  "
+in the beginning there was a turtle ...
+
+a very simple turtle that responds to only six commands, for now
+
+the turtles name is pixie
+
+pixie can move forward and backward, turn left or right by 90 degrees, and double or half its size
+
+the names of the six turtle commands are:
+forward backward left right half double
+
+pixie lives in an svg element in a div element of an html page
+
+you can inspect pixie in a browser window
+
+clicking a button puts a turtle command onto a channel
+
+the state of the turtle consists of
+
+* a position in screen coordinates
+* a heading - one of the four directions
+* a scale
+
+a processor listens on the channel for commands
+when it receives a command it updates the state of the turtle
+
+click on the command buttons and see the state change
+what does each command do to the state?
+")
+
 (defcard-rg pixie
   "a pixel turtle in a finite discrete pixel space"
   [pixie-turtle app-state]

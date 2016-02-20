@@ -14,13 +14,8 @@
    [devcards.core :as dc :refer [defcard deftest defcard-rg defcard-doc]]
    [cljs.core.async.macros :refer [go]]))
 
-(defn app-state [resolution]
-  (merge
-   polygon/initial-app-state
-   {:resolution resolution}))
-
 (def initial-app-state
-  (app-state 320))
+  (u/app-state 320))
 
 (defn polygon [{:keys [class-name color points]}]
   (apply svg/polygon class-name color points))
@@ -31,8 +26,8 @@
          (mapv polygon polygons)))
 
 (def program-button-set-1
-  [["Square"           (polygon/poly 4)]
-   ["Triangle"         (polygon/poly 3)]
+  [["Triangle"         (polygon/poly 3)]
+   ["Square"           (polygon/poly 4)]
    ["Hexagon"          (polygon/poly 6)]
    ["Dodecagon"        (polygon/poly 12)]
    ["24 sided polygon" (polygon/poly 24)]])
@@ -107,16 +102,23 @@
      (u/program-buttons ui-chan program-button-set-1)
      (color-wheel cw color-chan)
      [:svg {:width resolution :height resolution :class "board"}
+      (polygon-group polygons)
       (when (not (empty? points))
         (apply svg/polyline "lines" points))
-      (polygon-group polygons)
       (svg-turtle (:turtle a))]]))
+
+(defcard story
+  "
+a color wheel to select current color and
+
+a turtle that can make regular polygons using the current color
+")
 
 (defcard-rg polygon-card
   "regular polygons with color"
   (fn [app _] [polygons app])
   (reagent/atom (u/app-state 320))
-  {:inspect-data true :history true})
+  {:history true})
 
 (comment
   (in-ns 'hello-devcards.colored-polygon)
