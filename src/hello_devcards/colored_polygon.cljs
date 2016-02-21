@@ -85,10 +85,16 @@
                  #(assoc-in % [:current-color] color))
           (recur)))))
 
+(defn display-current-color [color]
+  [:div
+   [:p "Current color: "]
+   [:svg {:width 20 :height 20}
+    (svg/polygon "currnt-color" color [0 0] [20 0] [20 20] [0 20])]])
+
 (defn polygons
   [app-state]
   (let [app @app-state
-        {:keys [resolution turtle]} app
+        {:keys [resolution turtle current-color]} app
         f (mappings/eigth resolution)
         ui-chan (chan)
         color-chan (chan)
@@ -100,6 +106,7 @@
     [:div
      (u/command-buttons ui-chan command-button-set-1)
      (u/program-buttons ui-chan program-button-set-1)
+     (display-current-color current-color)
      (color-wheel cw color-chan)
      [:svg {:width resolution :height resolution :class "board"}
       (polygon-group polygons)

@@ -30,8 +30,6 @@
    A color wheel made using a complex turtle, polygon and svg.
 
 ** colored polygon
-   TODO
-
    Use polygon and color-wheel
    so that color-wheel manages the current color and
    when polygons are closed,
