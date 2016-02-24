@@ -4,10 +4,12 @@
    [complex.number :as n :refer [zero one i negative-one negative-i infinity add sub mult div]]
    [complex.vector :as v]
    [reagent.core :as reagent]
-   [sablono.core :as sab :include-macros true])
+   [sablono.core :as sab :include-macros true]
+   [goog.events :as events])
   (:require-macros
    [reagent.ratom :as ratom :refer [reaction]]
-   [devcards.core :as dc :refer [defcard deftest defcard-rg defcard-doc]]))
+   [devcards.core :as dc :refer [defcard deftest defcard-rg defcard-doc]])
+  (:import [goog.events EventType]))
 
 (enable-console-print!)
 
@@ -15,9 +17,20 @@
   (in-ns 'hello-devcards.bezier)
  )
 
-(defn handle-mouse-event [event point]
-  (let [e {:type (.-type event)
-           :position [(.-clientX event) (.-clientY event)]
+(defn by-id [id]
+  (.getElementById js/document id))
+
+(defn bounding-client-rect [id]
+  (let [el (by-id id)
+        rect (.getBoundingClientRect el)]
+    {:top (.-top rect)
+     :left (.-left rect)}))
+
+(defn handle-mouse-event [event point id]
+  (let [bcr (bounding-client-rect id)
+        e {:type (.-type event)
+           :position [(- (.-clientX event) (:left bcr))
+                      (- (.-clientY event) (:top bcr))]
            :point point
            :command (.-metaKey event)}]
     (println e)
@@ -26,24 +39,25 @@
 (defcard quadratic-bezier
   "M 30 75 Q 240 30 300 120"
   (sab/html
-   [:div
-    [:svg {:width 400 :height 400
-           }
-     [:path {:d "M 30 75 Q 240 30 300 120"
-             :stroke "red"
-             :fill "none"}]
-     [:circle {:cx 30 :cy 75 :r 5
-               :stroke "blue"
-               :fill "yellow"
-               :on-click #(handle-mouse-event % [30 75])}]
-     [:circle {:cx 240 :cy 30 :r 5
-               :stroke "blue"
-               :fill "green"
-               :on-click #(handle-mouse-event % [240 30])}]
-     [:circle {:cx 300 :cy 120 :r 5
-               :stroke "blue"
-               :fill "red"
-               :on-click #(handle-mouse-event % [300 120])}]]]))
+   (let [id "quadratic-bezier"]
+     [:div
+      [:svg {:width 400 :height 400
+             :id id}
+       [:path {:d "M 30 75 Q 240 30 300 120"
+               :stroke "red"
+               :fill "none"}]
+       [:circle {:cx 30 :cy 75 :r 5
+                 :stroke "blue"
+                 :fill "yellow"
+                 :on-click #(handle-mouse-event % [30 75] id)}]
+       [:circle {:cx 240 :cy 30 :r 5
+                 :stroke "blue"
+                 :fill "green"
+                 :on-click #(handle-mouse-event % [240 30] id)}]
+       [:circle {:cx 300 :cy 120 :r 5
+                 :stroke "blue"
+                 :fill "red"
+                 :on-click #(handle-mouse-event % [300 120] id)}]]])))
 
 (defcard quadratic-polybezier
   "M 30 100 Q 80 30 100 100 T 200 80"
@@ -112,12 +126,67 @@
      [:path {:d "M 0 0 L 200 200"
              :stroke "black"}]]]))
 
-(defn interactive-bezier [state svg-root]
-  [:svg {:width 200 :height 200 :view-box "0 0 200 200"
-         :id "bezier"}])
+(def bezier-state
+  {:start [30 75]
+   :control [240 30]
+   :end [300 120]})
 
-(defcard interactive-bezier-card
-  (sab/html
-   [:div
-    [:h1 "interactive bezier"]
-    [interactive-bezier (reagent/current-component)]]))
+(defn move-point-fn [id key atom]
+  (fn [event]
+    (let [bcr (bounding-client-rect id)
+          new-point [(- (.-clientX event) (:left bcr))
+                     (- (.-clientY event) (:top bcr))]]
+      (swap! atom assoc key new-point))))
+
+(defn drag-end-fn [drag-move drag-end-atom]
+  (fn [evt]
+    (events/unlisten js/window EventType.MOUSEMOVE drag-move)
+    (events/unlisten js/window EventType.MOUSEUP @drag-end-atom)))
+
+(defn dragging [on-drag]
+  (let [drag-end-atom (atom nil)
+        drag-end (drag-end-fn on-drag drag-end-atom)]
+    (reset! drag-end-atom drag-end)
+    (events/listen js/window EventType.MOUSEMOVE on-drag)
+    (events/listen js/window EventType.MOUSEUP drag-end)))
+
+(defn svg-point [point color id key app-state]
+  (let [[cx cy] point]
+    [:circle {:cx cx :cy cy :r 5 :stroke "blue" :fill color
+              :on-mouse-down #(dragging (move-point-fn id key app-state))}]))
+
+(defn svg-line [p1 p2 color]
+  (let [[x1 y1] p1
+        [x2 y2] p2]
+    [:line {:x1 x1 :y1 y1 :x2 x2 :y2 y2
+            :stroke color}]))
+
+(defn svg-quadratic-bezier
+  [{:keys [start control end]} color]
+  (let [[sx sy] start
+        [cx cy] control
+        [ex ey] end
+        path (str "M " sx " " sy " Q " cx " " cy " " ex " " ey)]
+    [:path {:d path :stroke color :fill "none"}]))
+
+(defn interactive-bezier [app-state]
+  (let [app @app-state
+        {:keys [start control end]} app
+        id "bezier"]
+    [:svg {:width 400 :height 400 :view-box "0 0 400 400"
+           :id id}
+     (svg-point control "green" id :control app-state)
+     (svg-point start "yellow" id :start app-state)
+     (svg-point end "red" id :end app-state)
+     (svg-line start control "grey")
+     (svg-line control end "grey")
+     (svg-quadratic-bezier app "orange")]))
+
+(defcard-rg interactive-bezier-card
+  "## interactive quadratic bezier
+three draggable points: yellow is the start point, green is the control point and red is the end point
+
+the quadratic bezier is orange"
+  (fn [app _] [interactive-bezier app])
+  (reagent/atom bezier-state)
+  {:inspect-data true})
