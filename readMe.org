@@ -10,6 +10,13 @@
    This requires my complex library which is not yet in clojars.
 
    https://github.com/wbabic/complex
+
+   to install the complex library locally:
+   #+BEGIN_SRC sh
+     git clone git@github.com:wbabic/complex.git
+     cd complex
+     lein install
+   #+END_SRC
 ** pixie-turtle
    A restricted svg turtle using simple turtle math
    involving addition and multiplication of whole numbers,
@@ -61,3 +68,5 @@
     https://facebook.github.io/react/docs/events.html
     build with react
     http://buildwithreact.com/tutorial/events
+**** dragging
+     taken from reagent geometry example

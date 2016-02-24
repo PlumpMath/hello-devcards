@@ -184,7 +184,11 @@
 
 (defcard-rg interactive-bezier-card
   "## interactive quadratic bezier
-three draggable points: yellow is the start point, green is the control point and red is the end point
+### three draggable points:
+
+* yellow is the start point,
+* green is the control point and
+* red is the end point
 
 the quadratic bezier is orange"
   (fn [app _] [interactive-bezier app])
