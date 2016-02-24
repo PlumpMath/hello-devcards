@@ -38,8 +38,26 @@
 ** lattice
    TODO
 
+** draggable points
+   reagent geometry example
+
+** references
+*** cljs
+    http://clojurescriptmadeeasy.com/blog/when-do-i-use-require-vs-import.html
+*** reagent
+    https://github.com/Day8/re-frame/wiki/Creating-Reagent-Components#form-2--a-function-returning-a-function
+    https://github.com/reagent-project/reagent-cookbook/tree/master/basics/component-level-state
+    https://github.com/Day8/re-frame/wiki/Using-Stateful-JS-Components
+
    The pixie turtle could handle a square lattice
    but not the other types.
 
    So, this will make use of polygon with a complex turtle
    that is mapped to screen space.
+*** events
+    google closure
+    https://developers.google.com/closure/library/docs/events_tutorial
+    react
+    https://facebook.github.io/react/docs/events.html
+    build with react
+    http://buildwithreact.com/tutorial/events

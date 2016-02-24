@@ -9,21 +9,41 @@
    [reagent.ratom :as ratom :refer [reaction]]
    [devcards.core :as dc :refer [defcard deftest defcard-rg defcard-doc]]))
 
+(enable-console-print!)
+
 (comment
   (in-ns 'hello-devcards.bezier)
  )
+
+(defn handle-mouse-event [event point]
+  (let [e {:type (.-type event)
+           :position [(.-clientX event) (.-clientY event)]
+           :point point
+           :command (.-metaKey event)}]
+    (println e)
+    e))
 
 (defcard quadratic-bezier
   "M 30 75 Q 240 30 300 120"
   (sab/html
    [:div
-    [:svg {:width 400 :height 400}
+    [:svg {:width 400 :height 400
+           }
      [:path {:d "M 30 75 Q 240 30 300 120"
              :stroke "red"
              :fill "none"}]
-     [:circle {:cx 30 :cy 75 :r 3 :stroke "blue" :fill "none"}]
-     [:circle {:cx 240 :cy 30 :r 3 :stroke "blue" :fill "none"}]
-     [:circle {:cx 300 :cy 120 :r 3 :stroke "blue" :fill "none"}]]]))
+     [:circle {:cx 30 :cy 75 :r 5
+               :stroke "blue"
+               :fill "yellow"
+               :on-click #(handle-mouse-event % [30 75])}]
+     [:circle {:cx 240 :cy 30 :r 5
+               :stroke "blue"
+               :fill "green"
+               :on-click #(handle-mouse-event % [240 30])}]
+     [:circle {:cx 300 :cy 120 :r 5
+               :stroke "blue"
+               :fill "red"
+               :on-click #(handle-mouse-event % [300 120])}]]]))
 
 (defcard quadratic-polybezier
   "M 30 100 Q 80 30 100 100 T 200 80"
@@ -91,3 +111,13 @@
              :fill "transparent"}]
      [:path {:d "M 0 0 L 200 200"
              :stroke "black"}]]]))
+
+(defn interactive-bezier [state svg-root]
+  [:svg {:width 200 :height 200 :view-box "0 0 200 200"
+         :id "bezier"}])
+
+(defcard interactive-bezier-card
+  (sab/html
+   [:div
+    [:h1 "interactive bezier"]
+    [interactive-bezier (reagent/current-component)]]))

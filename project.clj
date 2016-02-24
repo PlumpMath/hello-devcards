@@ -10,8 +10,8 @@
                  [org.clojure/tools.analyzer.jvm "0.6.9"]
 
                  [devcards "0.2.1-6" :exclusions [org.clojure/tools.reader]]
-                 [sablono "0.5.3"]
-                 [reagent "0.5.1"]
+                 [sablono "0.6.2"]
+                 [reagent "0.6.0-alpha"]
 
                  [org.clojure/core.match "0.3.0-alpha4"]
                  [org.clojure/core.async "0.2.374"]
@@ -21,7 +21,7 @@
                  [ring/ring-core "1.4.0"]
                  [clj-time "0.9.0"]
 
-                 [timothypratley/reanimated "0.1.1"]]
+                 ]
 
   :plugins [[lein-cljsbuild "1.1.2"]
             [lein-figwheel "0.5.0-6"

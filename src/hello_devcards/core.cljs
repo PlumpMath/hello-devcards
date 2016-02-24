@@ -9,7 +9,6 @@
    [hello-devcards.color-wheel]
    [hello-devcards.colored-polygon]
    [reagent.core :as reagent]
-   [timothypratley.reanimated.core :as anim]
    [sablono.core :as sab :include-macros true])
   (:require-macros
    [reagent.ratom :as ratom :refer [reaction]]
