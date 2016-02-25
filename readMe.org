@@ -2,12 +2,6 @@
   An exploration of turtle programming using
   svg, reagent, core.async and devcards.
 ** usage
-   #+BEGIN_SRC shell
-     lein figwheel
-
-     http://localhost:3449/cards.html
-   #+END_SRC
-
    This requires my complex library which is not yet in clojars.
 
    [[https://github.com/wbabic/complex]]
@@ -18,6 +12,13 @@
      cd complex
      lein install
    #+END_SRC
+   and then:
+   #+BEGIN_SRC shell
+     lein figwheel
+
+     http://localhost:3449/cards.html
+   #+END_SRC
+
 ** pixie-turtle
    A restricted svg turtle using simple turtle math
    involving addition and multiplication of whole numbers,
@@ -32,9 +33,15 @@
 
    A mapping transforms the turtle into screen coordinates.
 
+   see complex.cljc and mappings.cljc
+
+   used by polygon
+
 ** svg bezier
-   An exploration of bezier paths, xlink-href and use.
+   An exploration of bezier paths, xlink-href use and transform.
    Contains an interactive quadratic bazier with draggable points.
+
+   [[http://wbabic.github.io/hello-devcards/#!/hello_devcards.bezier]]
 ** polygon
    Turtle commands, command-processor and programs to make
    regular polygons, sections and wheels.
@@ -44,6 +51,7 @@
    Can be used from a clojure repl, from figwheel, or from within a devcard.
 ** color wheel
    A color wheel made using a complex turtle, polygon and svg.
+
    [[http://wbabic.github.io/hello-devcards/#!/hello_devcards.color_wheel]]
 ** colored polygon
    Use polygon and color-wheel
@@ -51,5 +59,6 @@
    when polygons are closed,
    the current color is used as the fill color of the polygon.
 
+   [[http://wbabic.github.io/hello-devcards/#!/hello_devcards.colored_polygon]]
 ** lattice
    TODO
