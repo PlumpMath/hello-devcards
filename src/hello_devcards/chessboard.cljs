@@ -3,6 +3,7 @@
    [devcards.core]
    [hello-devcards.pixie :as p]
    [hello-devcards.svg :as svg]
+   [hello-devcards.utils :as u]
    [reagent.core :as reagent]
    [cljs.core.async :as async :refer [>! <! put! chan alts! timeout]])
   (:require-macros
@@ -39,15 +40,9 @@
 (defn add-square [app square]
   (update-in app [:squares] #(conj % square)))
 
-(defn send!
-  "Send information from the user to the message queue.
-  The message must be a record which implements the Processor protocol."
-  [channel message]
-  (fn [dom-event]
-    (put! channel message)
-    (.stopPropagation dom-event)))
-
-(defn transform-str [turtle]
+(defn transform-str
+  "every turtle defines a transform"
+  [turtle]
   (let [{:keys [position heading scale]} turtle
         [x y] position
         angle (p/heading->angle heading)]
@@ -91,11 +86,10 @@
   (vec (flatten
            (list
             (->Pendown)
-            (flatten
-             (repeat 4
-                     [(p/->Forward base)
-                      (p/->Right)
-                      (->Pause 30)]))
+            (repeat 4
+                    [(p/->Forward base)
+                     (p/->Right)
+                     (->Pause 30)])
             (->ClosePoly color)))))
 
 (defn four-square [base]
@@ -136,24 +130,13 @@
         (instance? Pause command) (<! (timeout (:delay command)))
         :else (>! chan command)))))
 
-(defn command-button
-  "a single command button"
-  [ui-channel name command]
-  [:button {:on-click (send! ui-channel command)
-            :class "command"} name])
-
-(defn command-buttons
-  "gui for command buttons"
-  [ui-channel base]
-  (let [commands
-        [["Forward"  (p/->Forward (* base  1))]
-         ["Backward" (p/->Forward (* base -1))]
-         ["Left"     (p/->Left)]
-         ["Right"    (p/->Right)]
-         ["Half"     (p/->Resize (/ 2))]
-         ["Double"   (p/->Resize 2)]]]
-    (into [:div]
-          (map #(apply command-button ui-channel %) commands))))
+(defn command-button-set [base]
+  [["Forward"  (p/->Forward (* base  1))]
+   ["Backward" (p/->Forward (* base -1))]
+   ["Left"     (p/->Left)]
+   ["Right"    (p/->Right)]
+   ["Half"     (p/->Resize (/ 2))]
+   ["Double"   (p/->Resize 2)]])
 
 (defn square-buttons
   "program buttons"
@@ -211,11 +194,11 @@
   "an svg chessboard using a pixie turtle"
   [app-state]
   (let [{:keys [turtle squares polyline base resolution]} @app-state
-        chan (chan)
-        _ (process-channel chan app-state)]
+        ui-channel (chan)
+        _ (process-channel ui-channel app-state)]
     [:div
-     (command-buttons chan base)
-     (square-buttons chan base)
+     (u/command-buttons ui-channel (command-button-set base))
+     (square-buttons ui-channel base)
      [:svg {:width resolution :height resolution :class "board"}
       (svg/defs
         (svg/straight-arrow "arrow" base))
@@ -228,10 +211,10 @@
   "an svg chessboard using a pixie turtle"
   [app-state]
   (let [{:keys [turtle squares polyline base resolution]} @app-state
-        chan (chan)
-        _ (process-channel chan app-state)]
+        ui-channel (chan)
+        _ (process-channel ui-channel app-state)]
     [:div
-     (board-buttons chan base)
+     (board-buttons ui-channel base)
      [:svg {:width resolution :height resolution :class "board"}
       (when (not (empty? polyline))
         (apply svg/polyline "lines" polyline))

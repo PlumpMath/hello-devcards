@@ -88,6 +88,7 @@
     [:use {:xlink-href "#test" :transform "rotate(10) translate(200, 200)" :stroke "purple"}]]))
 
 (defcard arrow
+  "a path defined in defs,reused with use, xlink-href and svg transforms"
   (sab/html
    [:div
     [:svg {:width 200 :height 200 :view-box "0 0 200 200"}
@@ -100,14 +101,14 @@
      [:use {:xlink-href "#turtle-shell"
             :transform "translate(20, 5) rotate(10) scale(1.5)"
             :stroke "purple"
-            :fill "orange"}]
+            :fill "green"}]
      [:use {:xlink-href "#turtle-shell"
             :transform "translate(20, 20) rotate(30) scale(2)"
-            :stroke "purple"
-            :fill "orange"}]
+            :stroke "magenta"
+            :fill "yellow"}]
      [:use {:xlink-href "#turtle-shell"
             :transform "translate(20, 70) rotate(60) scale(2.5)"
-            :stroke "blue"
+            :stroke "cyan"
             :fill "red"}]]]))
 
 (defcard corner-bezier
