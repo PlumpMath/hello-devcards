@@ -1,5 +1,6 @@
 * hello devcards
-  An exploration of turtle programming using svg, reagent and devcards.
+  An exploration of turtle programming using
+  svg, reagent, core.async and devcards.
 ** usage
    #+BEGIN_SRC shell
      lein figwheel
@@ -25,17 +26,25 @@
    and is implemented directly in screen coordinates,
    making use of svg transformations.
 
+   [[http://wbabic.github.io/hello-devcards/#!/hello_devcards.pixie_turtle]]
 ** complex turtle
    A turtle implemented using complex numbers.
 
    A mapping transforms the turtle into screen coordinates.
 
+** svg bezier
+   An exploration of bezier paths, xlink-href and use.
+   Contains an interactive quadratic bazier with draggable points.
 ** polygon
-   Turtle commands and program to makes regular polygons.
+   Turtle commands, command-processor and programs to make
+   regular polygons, sections and wheels.
 
+   see polygon.cljc
+
+   Can be used from a clojure repl, from figwheel, or from within a devcard.
 ** color wheel
    A color wheel made using a complex turtle, polygon and svg.
-
+   [[http://wbabic.github.io/hello-devcards/#!/hello_devcards.color_wheel]]
 ** colored polygon
    Use polygon and color-wheel
    so that color-wheel manages the current color and

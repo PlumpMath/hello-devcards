@@ -2,6 +2,7 @@
   (:require
    [devcards.core]
    [hello-devcards.pixie :as p]
+   [hello-devcards.utils :as u]
    [reagent.core :as reagent]
    [cljs.core.async :as async :refer [>! <! put! chan alts! timeout]])
   (:require-macros
@@ -16,24 +17,13 @@
 
 (def app-state (reagent/atom p/init-app-state))
 
-(defn send!
-  "Send information from the user to the message queue.
-  The message must be a record which implements the Processor protocol."
-  [channel message]
-  (fn [dom-event]
-    (put! channel message)
-    (.stopPropagation dom-event)))
-
-(defn command-buttons
-  "gui with command buttons"
-  [ui-channel]
-  [:div
-   [:button {:on-click (send! ui-channel (p/->Forward (* 40  1)))}   "Forward"]
-   [:button {:on-click (send! ui-channel (p/->Forward (* 40 -1)))}   "Backward"]
-   [:button {:on-click (send! ui-channel (p/->Left))}                "Left"]
-   [:button {:on-click (send! ui-channel (p/->Right))}               "Right"]
-   [:button {:on-click (send! ui-channel (p/->Resize (/ 2)))}        "Half"]
-   [:button {:on-click (send! ui-channel (p/->Resize 2))}            "Double"]])
+(def command-button-set
+  [["Forward"  (p/->Forward (* 40  1))]
+   ["Backward" (p/->Forward (* 40 -1))]
+   ["Left"     (p/->Left)]
+   ["Right"    (p/->Right)]
+   ["Half"     (p/->Resize (/ 2))]
+   ["Double"   (p/->Resize 2)]])
 
 (defn process-channel [turtle-channel]
   (go (loop []
@@ -51,10 +41,10 @@
 (defn pixie-turtle [app-state]
   (let [{:keys [position heading scale resolution]} @app-state
         [x y] position
-        chan (chan)
-        _ (process-channel chan)]
+        ui-channel (chan)
+        _ (process-channel ui-channel)]
     [:div
-     (command-buttons chan)
+     (u/command-buttons ui-channel command-button-set)
      [:svg {:width resolution :height resolution :class "board"}
       [:defs
        pixie-path]
@@ -76,9 +66,15 @@ the turtles name is pixie
 pixie can move forward and backward, turn left or right by 90 degrees, and double or half its size
 
 the names of the six turtle commands are:
-forward backward left right half double
 
-pixie lives in an svg element in a div element of an html page
+* forward
+* backward
+* left
+* right
+* half
+* double
+
+pixie lives in an svg element inside of a div element in an html page
 
 you can inspect pixie in a browser window
 
@@ -94,6 +90,7 @@ a processor listens on the channel for commands
 when it receives a command it updates the state of the turtle
 
 click on the command buttons and see the state change
+
 what does each command do to the state?
 ")
 
