@@ -10,7 +10,7 @@
 
 (defn transform-state
   "transform state using f, a function of complex number
-from user space into screen coordinates"
+  from user space into screen coordinates"
   [f state]
   (-> state
       (update-in [:turtle] #(turtle/transform-turtle f %))
@@ -24,6 +24,7 @@ from user space into screen coordinates"
                           (fn [points] (mapv f points)))))
                    %))))
 
+;; ten commands
 (defrecord BeginPoly [])
 (defrecord Point [])
 (defrecord ClosePoly [])
@@ -78,7 +79,6 @@ from user space into screen coordinates"
      (->Point)
      (->Out)
      (->Point)
-     (->Pause 100)
      (->Turn (- a))
      (->Point)
      (->In)
