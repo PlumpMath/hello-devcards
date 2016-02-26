@@ -166,4 +166,9 @@
         data [n/zero n/one n/i]]
     (mapv (comp n/coords f) data))
   ;;=> [[160 160] [200 160] [160 120]]
+
+  (let [f (as-fn (inverse (eigth 320)))
+        data [[160 160] [200 160] [160 120]]]
+    (mapv (comp n/coords f n/c) data))
+  ;;=> [[0 0] [1N 0N] [0N 1N]]
   )
