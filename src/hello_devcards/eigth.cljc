@@ -13,9 +13,8 @@
 (defrecord General [a b conj])
 (defrecord Composition [sequence])
 
-(def identity-transform (->General n/one n/zero false))
-
-(defrecord Round [])
+(def identity-triple [n/one n/zero false])
+(def identity-transform (apply ->General identity-triple))
 
 (defn eigth
   "a mapping from the complex numbers into screen coordinates
@@ -139,28 +138,25 @@
     (inverse f))
   (transform standard-turtle (eigth 320))
 
-  (let [i [n/one n/zero false]]
-    (display-triple i))
+  (display-triple identity-triple)
 
-  (let [i [n/one n/zero false]
-        t (->Reflection)]
+  (let [t (->Reflection)]
     (display-triple
-     (compose t i)))
+     (compose t identity-triple)))
 
   (display-triple
    (reduce (fn [res trans]
              (compose trans res))
-           [n/one n/zero false]
+           identity-triple
            (list
             (->Rotation 30)
             (->Scale 2)
             (->Translation n/i)
             (->Reflection))))
 
-  (let [i [n/one n/zero false]
-        t (eigth 320)]
+  (let [t (eigth 320)]
     (display-triple
-     (compose t i)))
+     (compose t identity-triple)))
 
   (let [f (as-fn (eigth 320))
         data [n/zero n/one n/i]]
