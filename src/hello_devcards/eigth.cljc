@@ -32,8 +32,7 @@
      (list
       (->Reflection)
       (->Scale s)
-      (->Translation screen-midpoint)
-      (->Round)))))
+      (->Translation screen-midpoint)))))
 
 ;; geometric objects
 (defrecord Circle [center radius])
@@ -109,13 +108,22 @@
   Composition
   (compose [{s :sequence} [a b conj]]
     (reduce
+     (fn [result transform]
+       (compose transform result))
      [a b conj]
-     (fn [result transform])
      s)))
 
 (defn display-triple [[a b conj]]
   (let [f n/coords]
     [(f a) (f b) conj]))
+
+(defn as-fn [transform]
+  (let [i [n/one n/zero false]
+        [a b conj] (compose transform i)]
+    (fn [z]
+      (if (false? conj)
+        (n/plus (n/times a z) b)
+        (n/plus (n/times a (n/conjugate z)) b)))))
 
 (comment
   (require '[hello-devcards.eigth] :reload)
@@ -147,4 +155,15 @@
             (->Rotation 30)
             (->Scale 2)
             (->Translation n/i)
-            (->Reflection)))))
+            (->Reflection))))
+
+  (let [i [n/one n/zero false]
+        t (eigth 320)]
+    (display-triple
+     (compose t i)))
+
+  (let [f (as-fn (eigth 320))
+        data [n/zero n/one n/i]]
+    (mapv (comp n/coords f) data))
+  ;;=> [[160 160] [200 160] [160 120]]
+  )
