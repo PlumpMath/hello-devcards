@@ -1,4 +1,4 @@
-(ns hello-devcards.geometry
+ (ns hello-devcards.geometry
   "geometric objects and transforms and such"
   (:require
    [complex.number :as n]
@@ -159,7 +159,7 @@
     (let [f (as-fn transformation)]
       (-> circle
           (update-in [:center] f)
-          )))
+          (update-in [:radius] f))))
   Point
   (transform [point transformation]
     (let [f (as-fn transformation)]
@@ -223,10 +223,11 @@
 
   (transform standard-turtle (->Translation (n/c [2 3])))
   (transform standard-turtle (->Scale 2))
-  (transform (turtle/move standard-turtle (n/c [2 3]))
-             (->Reflection))
-  (transform (turtle/move standard-turtle (n/c [2 3]))
-             (->Rotation 30))
+  (transform standard-turtle
+             (->Composition
+              (list
+               (->Rotation 30)
+               (->Reflection))))
   (transform standard-turtle
              (->Composition
               (list
