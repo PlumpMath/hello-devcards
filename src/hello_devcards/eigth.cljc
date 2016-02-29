@@ -26,6 +26,15 @@
 (defn inverse-eigth [resolution]
   (g/as-fn (g/inverse (eigth-transform resolution))))
 
+(defn bounding-rect [resolution]
+  {:top-left [0 0]
+   :top-right [resolution 0]
+   :bot-left [0 resolution]
+   :bot-right [resolution resolution]
+   :center [(/ resolution 2) (/ resolution 2)]
+   :point-radius 5})
+
+
 (comment
   (require '[hello-devcards.eigth] :reload)
   (in-ns 'hello-devcards.eigth)
@@ -35,9 +44,16 @@
     (mapv (comp n/coords f) data))
   ;;=> [[160 160] [200 160] [160 120]]
 
+  (let [f (eigth 320)
+        data [n/zero n/one n/i 1]]
+    (mapv f data))
+  ;;=>
   (let [f (inverse-eigth 320)
         data [[160 160] [200 160] [160 120]]]
     (mapv (comp n/coords f n/c) data))
   ;;=> [[0 0] [1N 0N] [0N 1N]]
 
+  (let [f (inverse-eigth 320)
+        data [[0 0] [320 0] [0 320] [320 320]]]
+    (mapv (comp n/coords f n/c) data))
   )

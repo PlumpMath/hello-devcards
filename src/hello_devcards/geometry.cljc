@@ -159,7 +159,7 @@
     (let [f (as-fn transformation)]
       (-> circle
           (update-in [:center] f)
-          (update-in [:radius] f))))
+          (update-in [:radius] (comp n/length f)))))
   Point
   (transform [point transformation]
     (let [f (as-fn transformation)]
@@ -219,6 +219,11 @@
 
   (let [c (->Circle n/zero 1)
         t (->Translation n/one)]
+    (transform c t))
+
+  (let [c (->Circle n/zero 1)
+        t (->Composition
+           (list (->Translation n/one)))]
     (transform c t))
 
   (transform standard-turtle (->Translation (n/c [2 3])))
