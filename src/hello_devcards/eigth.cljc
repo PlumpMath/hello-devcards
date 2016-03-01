@@ -10,7 +10,7 @@
     (g/->Composition
      (list
       (g/->Reflection)
-      (g/->Scale s)
+      (g/->Dilation s)
       (g/->Translation screen-midpoint)))))
 
 (defn eigth

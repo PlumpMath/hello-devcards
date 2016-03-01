@@ -7,7 +7,7 @@
 ;; geometric transformations as data
 ;; using complex numbers
 (defrecord Reflection [])
-(defrecord Scale [s])
+(defrecord Dilation [ratio])
 (defrecord Rotation [angle])
 (defrecord Translation [v])
 (defrecord Affine [a b conj])
@@ -34,8 +34,8 @@
 (extend-protocol Invertible
   Reflection
   (inverse [reflection] reflection)
-  Scale
-  (inverse [{s :s}] (->Scale (/ s)))
+  Dilation
+  (inverse [{r :ratio}] (->Dilation (/ r)))
   Rotation
   (inverse [{a :angle}] (->Rotation (- a)))
   Translation
@@ -59,9 +59,9 @@
   Reflection
   (compose [_ [a b conj]]
     [(n/conjugate a) (n/conjugate b) (toggle conj)])
-  Scale
-  (compose [{s :s} [a b conj]]
-    [(n/times a s) (n/times b s) conj])
+  Dilation
+  (compose [{r :ratio} [a b conj]]
+    [(n/times a r) (n/times b r) conj])
   Rotation
   (compose [{angle :angle} [a b conj]]
     (let [w (n/complex-polar angle)]
@@ -104,13 +104,13 @@
   four steps (or two doubles) gets a turtle to the edge and
   up is really up"
   [resolution]
-  (let [s (/ resolution 8)
+  (let [r (/ resolution 8)
         m (/ resolution 2)
         screen-midpoint (n/c [m m])]
     (->Composition
      (list
       (->Reflection)
-      (->Scale s)
+      (->Dilation r)
       (->Translation screen-midpoint)))))
 
 (defprotocol Transformable
@@ -135,7 +135,7 @@
               (update-in [:position] f)
               (update-in [:angle] #(+ % angle))))
 
-        (instance? Scale transformation)
+        (instance? Dilation transformation)
         (-> turtle
             (update-in [:position] f)
             (update-in [:length] f))
@@ -143,12 +143,12 @@
         (instance? Affine transformation)
         (let [{a :a b :b conj :conj} transformation
               angle (n/rad->deg (n/arg a))
-              scale (n/length a)
+              ratio (n/length a)
               seq (if (false? conj)
                     (list (->Rotation angle)
-                          (->Scale scale))
+                          (->Dilation ratio))
                     (list (->Rotation angle)
-                          (->Scale scale)
+                          (->Dilation ratio)
                           (->Reflection)))]
           (transform turtle (->Composition seq)))
 
@@ -156,10 +156,12 @@
         (reduce transform turtle (:sequence transformation)))))
   Circle
   (transform [circle transformation]
-    (let [f (as-fn transformation)]
+    (let [f (as-fn transformation)
+          {:keys [center radius]} circle
+          v (n/plus center (n/times n/one radius))]
       (-> circle
           (update-in [:center] f)
-          (update-in [:radius] (comp n/length f)))))
+          (assoc-in [:radius] (n/length (n/sub (f center) (f v)))))))
   Point
   (transform [point transformation]
     (let [f (as-fn transformation)]
@@ -170,7 +172,7 @@
   (in-ns 'hello-devcards.geometry)
   (inverse (->Translation n/one))
   (inverse (->Rotation 30))
-  (inverse (->Scale 2))
+  (inverse (->Dilation 2))
   (inverse (->Reflection))
   (inverse identity-transform)
   (let [a (n/complex-polar 2 30)
@@ -191,7 +193,7 @@
            identity-triple
            (list
             (->Rotation 30)
-            (->Scale 2)
+            (->Dilation 2)
             (->Translation n/i)
             (->Reflection))))
 
@@ -223,11 +225,13 @@
 
   (let [c (->Circle n/zero 1)
         t (->Composition
-           (list (->Translation n/one)))]
+           (list
+            (->Dilation 2)
+            (->Translation n/one)))]
     (transform c t))
 
   (transform standard-turtle (->Translation (n/c [2 3])))
-  (transform standard-turtle (->Scale 2))
+  (transform standard-turtle (->Dilation 2))
   (transform standard-turtle
              (->Composition
               (list
