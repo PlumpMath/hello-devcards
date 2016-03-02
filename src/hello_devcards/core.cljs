@@ -8,6 +8,7 @@
    [hello-devcards.chessboard]
    [hello-devcards.color-wheel]
    [hello-devcards.colored-polygon]
+   [hello-devcards.transforms]
    [reagent.core :as reagent]
    [sablono.core :as sab :include-macros true])
   (:require-macros
