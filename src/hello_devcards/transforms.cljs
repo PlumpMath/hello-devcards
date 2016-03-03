@@ -5,6 +5,7 @@
    [complex.vector :as v]
    [hello-devcards.complex :as turtle]
    [hello-devcards.polygon :as polygon]
+   [hello-devcards.lattice :as lattice]
    [hello-devcards.utils :as u]
    [hello-devcards.mappings :as mappings]
    [hello-devcards.svg :as svg]
@@ -62,6 +63,16 @@ these are applied to the transformed turtle
                    (svg/circle (:position turtle) 3)
                    (svg/line (:position turtle) (:tip turtle)))))
 
+(def lattice-points
+  (:points (lattice/four-by-four-lattice lattice/initial-state)))
+
+(defn lattice-point [p]
+  (svg/circle p 3))
+
+(defn render-lattice [lattice f]
+  (let [g (comp lattice-point f)]
+    (apply svg/group-svg "lattice" (map g lattice))))
+
 (defn transforms
   [app-state]
   (let [app @app-state
@@ -72,6 +83,7 @@ these are applied to the transformed turtle
      (u/command-buttons ui-chan command-button-set-1)
      (u/program-buttons ui-chan program-button-set-1)
      [:svg {:width resolution :height resolution :class "board"}
+      (render-lattice lattice-points f)
       (svg-turtle (:t1 app) f "turtle")
       (svg-turtle (:t2 app) f "turtle2")]]))
 

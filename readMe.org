@@ -60,5 +60,18 @@
    the current color is used as the fill color of the polygon.
 
    [[http://wbabic.github.io/hello-devcards/#!/hello_devcards.colored_polygon]]
-** lattice
-   TODO
+** lattice turtle
+   a lattice turtle has a position and two heading vectors
+
+   the lattice turtle can
+
+   - move forward and backward along those two dimensions
+   - leave a point at each position it visits
+
+   #+BEGIN_SRC clojure
+          (reduce
+           (fn [state command]
+             (process-command command state))
+           standard-turtle
+           turtle-program)
+   #+END_SRC
