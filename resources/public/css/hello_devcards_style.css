@@ -41,6 +41,10 @@ g#turtle {
   stroke: black;
   fill: yellow;
 }
+g#turtle2 {
+  stroke: black;
+  fill: orange;
+}
 polygon.red {
   fill: transparent;
   stroke: black;
