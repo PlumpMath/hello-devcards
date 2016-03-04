@@ -84,7 +84,6 @@ these are applied to the transformed turtle
 (defn process-transform-chan [channel state]
   (go (loop []
         (let [transform (<! channel)]
-          (println transform)
           (swap! state #(update-in % [:turtle] (fn [t] (g/transform t transform))))
           (recur)))))
 

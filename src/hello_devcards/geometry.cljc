@@ -138,7 +138,7 @@
         (instance? Dilation transformation)
         (-> turtle
             (update-in [:position] f)
-            (update-in [:length] f))
+            (update-in [:length] #(* % (:ratio transformation))))
 
         (instance? Affine transformation)
         (let [{a :a b :b conj :conj} transformation
