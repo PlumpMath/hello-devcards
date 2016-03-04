@@ -2,7 +2,8 @@
   "mapping from complex numbers in user space to screen space
   and back again"
   (:require
-   [complex.number :as n]))
+   [complex.number :as n]
+   [hello-devcards.geometry :as g]))
 
 ;; a maaping that maps unit circle
 ;; center to midpoint
@@ -18,6 +19,15 @@
   "round a given complex number"
   [c]
   (mapv round c))
+
+(def to-screen
+  (comp round-c n/coords))
+
+(defn user->screen
+  "create a user->screen fn for given fn f
+where f is a geometric transformation of complex numbers"
+  [f]
+  (comp to-screen f))
 
 (defn mapping [resolution fraction]
   (let [k (/ resolution fraction)
@@ -45,4 +55,11 @@
   (let [f (eigth 320)
         data [n/zero n/one n/i]]
     (mapv f data))
+
+  (let [f (g/eigth 640)  ;; a transformation of user-space
+        u->u (g/as-fn f) ;; transformation as a function
+        u->s (user->screen u->u) ;; a user->screen function
+        ]
+    [(u->u n/zero)
+     (u->s n/zero)])
   )
