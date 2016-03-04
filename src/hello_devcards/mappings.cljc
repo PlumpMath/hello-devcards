@@ -1,13 +1,14 @@
 (ns hello-devcards.mappings
-  "mapping from complex numbers in user space to screen space
-  and back again"
+  "mapping of complex numbers
+  from complex numbers to complex numbers and
+  from complex numbers to screen coordinates"
   (:require
    [complex.number :as n]
    [hello-devcards.geometry :as g]))
 
 ;; a maaping that maps unit circle
 ;; center to midpoint
-;; radius to an eighth of screen spcace
+;; radius to an eigth of screen spcace
 ;; where up is really up
 
 (defn round

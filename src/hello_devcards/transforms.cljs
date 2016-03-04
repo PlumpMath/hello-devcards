@@ -41,7 +41,8 @@ that are applied to the orange turtle
            (turtle/move (n/c [2 1]))
            (turtle/turn 15)
            (turtle/resize (/ 2)))
-   :mapping (g/eigth 640)})
+   :mapping (g/eigth 640)
+   :triple g/identity-triple})
 
 (def command-button-set-1
   [["Forward"  (polygon/->Forward 1)]
@@ -57,6 +58,14 @@ that are applied to the orange turtle
    ["Rotate -90"     (g/->Rotation -90)]
    ["Dilate 2"       (g/->Dilation 2)]
    ["Dilate 1/2"     (g/->Dilation (/ 2))]])
+
+(def command-button-set-3
+  [["Pan Left"  (g/->Translation n/one)]
+   ["Pan Right" (g/->Translation (n/minus n/one))]
+   ["Pan Up"    (g/->Translation (n/minus n/i))]
+   ["Pan Down"  (g/->Translation n/i)]
+   ["Zoom in"   (g/->Dilation 2)]
+   ["Zoom out"  (g/->Dilation (/ 2))]])
 
 (defn svg-turtle [t user->user class-name]
   (let [f (mappings/user->screen user->user)
@@ -86,19 +95,29 @@ that are applied to the orange turtle
           (swap! state #(update-in % [:turtle] (fn [t] (g/transform t transform))))
           (recur)))))
 
+(defn process-perspective-chan [channel state]
+  (go (loop []
+        (let [transform (<! channel)]
+          (println transform)
+          (swap! state #(update-in % [:triple] (fn [t] (g/compose transform t))))
+          (recur)))))
+
 (defn transforms
   [app-state]
   (let [app @app-state
-        user->user (g/as-fn (:mapping app))
+        user->user (apply g/as-fn (g/compose (:mapping app) (:triple app)))
         resolution 640
         f (mappings/user->screen user->user)
         ui-chan (chan)
         transform-chan (chan)
+        perspective-chan (chan)
         _ (u/process-channel ui-chan app-state)
-        _ (process-transform-chan transform-chan app-state)]
+        _ (process-transform-chan transform-chan app-state)
+        _ (process-perspective-chan perspective-chan app-state)]
     [:div
      (u/command-buttons ui-chan command-button-set-1)
      (u/command-buttons transform-chan command-button-set-2)
+     (u/command-buttons perspective-chan command-button-set-3)
      [:svg {:width resolution :height resolution :class "board"}
       (svg-turtle (:t1 app) user->user "turtle")
       (svg-turtle (:turtle app) user->user "turtle2")

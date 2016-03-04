@@ -88,13 +88,18 @@
   (let [f n/coords]
     [(f a) (f b) conj]))
 
-(defn as-fn [transform]
-  (let [i [n/one n/zero false]
-        [a b conj] (compose transform i)]
-    (fn [z]
-      (if (false? conj)
-        (n/plus (n/times a z) b)
-        (n/plus (n/times a (n/conjugate z)) b)))))
+(defn as-fn
+  ([transform]
+   (let [[a b conj] (compose transform identity-triple)]
+     (fn [z]
+       (if (false? conj)
+         (n/plus (n/times a z) b)
+         (n/plus (n/times a (n/conjugate z)) b)))))
+  ([a b conj]
+   (fn [z]
+     (if (false? conj)
+       (n/plus (n/times a z) b)
+       (n/plus (n/times a (n/conjugate z)) b)))))
 
 (defn eigth
   "a mapping from the complex numbers into screen coordinates
