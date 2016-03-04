@@ -41,6 +41,14 @@ g#turtle {
   stroke: black;
   fill: yellow;
 }
+g#turtle2 {
+  stroke: black;
+  fill: orange;
+}
+g#lattice {
+  stroke: black;
+  fill: blue;
+}
 polygon.red {
   fill: transparent;
   stroke: black;
