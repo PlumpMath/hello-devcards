@@ -24,16 +24,15 @@
 
 two turtles
 
-a standard turtle and a transformed tutle (transformed by sending it turtle commands)
+a fixed yellow standard turtle and a movable orange turtle
 
 start off with some simple transformations wrt the standard turtle
 
-* translation by 1 or i
 * reflection in x-axis
 * rotation by 90 degrees
 * dilation by ratio 2 or 1/2
 
-these are applied to the transformed turtle
+that are applied to the orange turtle
 ")
 
 (def initial-app-state
@@ -53,11 +52,11 @@ these are applied to the transformed turtle
    ["Double"   (polygon/->Resize 2)]])
 
 (def command-button-set-2
-  [["Reflect"    (g/->Reflection)]
-   ["Rotate 90"  (g/->Rotation 90)]
-   ["Rotate -90" (g/->Rotation -90)]
-   ["Dilate 2"   (g/->Dilation 2)]
-   ["Dilate 1/2" (g/->Dilation (/ 2))]])
+  [["Reflect x-axis" (g/->Reflection)]
+   ["Rotate 90"      (g/->Rotation 90)]
+   ["Rotate -90"     (g/->Rotation -90)]
+   ["Dilate 2"       (g/->Dilation 2)]
+   ["Dilate 1/2"     (g/->Dilation (/ 2))]])
 
 (defn svg-turtle [t user->user class-name]
   (let [f (mappings/user->screen user->user)
