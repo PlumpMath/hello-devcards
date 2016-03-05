@@ -60,12 +60,14 @@ that are applied to the orange turtle
    ["Dilate 1/2"     (g/->Dilation (/ 2))]])
 
 (def command-button-set-3
-  [["Pan Left"  (g/->Translation n/one)]
-   ["Pan Right" (g/->Translation (n/minus n/one))]
-   ["Pan Up"    (g/->Translation (n/minus n/i))]
-   ["Pan Down"  (g/->Translation n/i)]
-   ["Zoom in"   (g/->Dilation 2)]
-   ["Zoom out"  (g/->Dilation (/ 2))]])
+  [["Pan Left"   (g/->Translation n/one)]
+   ["Pan Right"  (g/->Translation (n/minus n/one))]
+   ["Pan Up"     (g/->Translation (n/minus n/i))]
+   ["Pan Down"   (g/->Translation n/i)]
+   ["Zoom in"    (g/->Dilation 2)]
+   ["Zoom out"   (g/->Dilation (/ 2))]
+   ["Rotate 15"  (g/->Rotation 15)]
+   ["Rotate -15" (g/->Rotation -15)]])
 
 (defn svg-turtle [t user->user class-name]
   (let [f (mappings/user->screen user->user)
