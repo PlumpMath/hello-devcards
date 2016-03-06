@@ -27,6 +27,15 @@
 
 (def standard-turtle (map->Turtle turtle/initial-turtle))
 
+(defn turtle-transformation
+  "return the transformation that maps the given turtle to the standard turtle"
+  [{:keys [position length angle]}]
+  (->Composition
+   (list
+    (->Translation (n/minus position))
+    (->Dilation (/ length))
+    (->Rotation (- angle)))))
+
 ;; all transforms have inverse
 (defprotocol Invertible
   (inverse [transformation]))

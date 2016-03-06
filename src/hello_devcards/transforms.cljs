@@ -20,7 +20,7 @@
   (:import [goog.events EventType]))
 
 (defcard story
-  "transformation playgroud
+  "transformation playground
 
 two turtles
 
@@ -33,18 +33,23 @@ start off with some simple transformations wrt the standard turtle
 * dilation by ratio 2 or 1/2
 
 that are applied to the orange turtle
+
+next, we apply transformations to the perspective mapping
+
+and finally, create a transform from the orange turtle to the yellow turtle and apply that to the perspective mapping
 ")
 
-(def initial-app-state
-  {:t1 g/standard-turtle
-   :turtle (-> g/standard-turtle
-           (turtle/move (n/c [2 1]))
-           (turtle/turn 15)
-           (turtle/resize (/ 2)))
+ (def initial-app-state
+  {:st g/standard-turtle
+   :turtle
+   (-> g/standard-turtle
+       (turtle/move (n/c [2 1]))
+       (turtle/turn 15)
+       (turtle/resize (/ 2)))
    :mapping (g/eigth 640)
    :triple g/identity-triple})
 
-(def command-button-set-1
+(def button-set-1
   [["Forward"  (polygon/->Forward 1)]
    ["Backward" (polygon/->Forward -1)]
    ["Left"     (polygon/->Turn 15)]
@@ -52,14 +57,14 @@ that are applied to the orange turtle
    ["Half"     (polygon/->Resize (/ 2))]
    ["Double"   (polygon/->Resize 2)]])
 
-(def command-button-set-2
+(def button-set-2
   [["Reflect x-axis" (g/->Reflection)]
    ["Rotate 90"      (g/->Rotation 90)]
    ["Rotate -90"     (g/->Rotation -90)]
    ["Dilate 2"       (g/->Dilation 2)]
    ["Dilate 1/2"     (g/->Dilation (/ 2))]])
 
-(def command-button-set-3
+(def button-set-3
   [["Pan Left"   (g/->Translation n/one)]
    ["Pan Right"  (g/->Translation (n/minus n/one))]
    ["Pan Up"     (g/->Translation (n/minus n/i))]
@@ -68,6 +73,35 @@ that are applied to the orange turtle
    ["Zoom out"   (g/->Dilation (/ 2))]
    ["Rotate 15"  (g/->Rotation 15)]
    ["Rotate -15" (g/->Rotation -15)]])
+
+(defn turtle-transform-fn
+  "buttons to transforms perspective"
+  [app-state channel]
+  (fn [dom-event]
+    (let [app @app-state
+          {:keys [turtle]} app
+          trans (g/turtle-transformation turtle)]
+      (put! channel trans)
+      (.stopPropagation dom-event))))
+
+(defn reset-perspective-fn
+  [app-state channel]
+  (fn [dom-event]
+    (let [app @app-state
+          {:keys [triple]} app
+          trans (apply g/->Affine triple)]
+      (put! channel (g/inverse trans))
+      (.stopPropagation dom-event))))
+
+(defn fn-button [name f]
+  [:button {:on-click f
+            :class "command"} name])
+
+(defn perspective-buttons
+  [app-state channel]
+  [:div
+   (fn-button "t2->st" (turtle-transform-fn app-state channel))
+   (fn-button "reset perspective" (reset-perspective-fn app-state channel))])
 
 (defn svg-turtle [t user->user class-name]
   (let [f (mappings/user->screen user->user)
@@ -117,15 +151,27 @@ that are applied to the orange turtle
         _ (process-transform-chan transform-chan app-state)
         _ (process-perspective-chan perspective-chan app-state)]
     [:div
-     (u/command-buttons ui-chan command-button-set-1)
-     (u/command-buttons transform-chan command-button-set-2)
-     (u/command-buttons perspective-chan command-button-set-3)
+     (u/command-buttons ui-chan button-set-1)
+     (u/command-buttons transform-chan button-set-2)
+     (u/command-buttons perspective-chan button-set-3)
+     (perspective-buttons app-state perspective-chan)
      [:svg {:width resolution :height resolution :class "board"}
-      (svg-turtle (:t1 app) user->user "turtle")
+      (svg-turtle (:st app) user->user "turtle")
       (svg-turtle (:turtle app) user->user "turtle2")
       (render-lattice lattice-points f)]]))
 
 (defcard-rg transform-card
   "a transformation playground"
   (fn [app _] [transforms app])
-  (reagent/atom initial-app-state))
+  (reagent/atom initial-app-state)
+  {:history true})
+
+(comment
+  (in-ns 'hello-devcards.transforms)
+  (:st initial-app-state)
+  (:turtle initial-app-state)
+  (g/turtle-transformation (:turtle initial-app-state))
+  (let [{:keys [st turtle]} initial-app-state
+        f (g/turtle-transformation turtle)]
+    (= st (g/transform turtle f)))
+  )
