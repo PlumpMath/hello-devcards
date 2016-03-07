@@ -75,22 +75,20 @@ and finally, create a transform from the orange turtle to the yellow turtle and 
    ["Rotate -15" (g/->Rotation -15)]])
 
 (defn turtle-transform-fn
-  "buttons to transform perspective"
+  "function to transform perspective
+  to that of turtle"
   [app-state channel]
   (fn [dom-event]
-    (let [app @app-state
-          {:keys [turtle]} app
-          trans (g/turtle-transformation turtle)]
-      (put! channel trans)
+    (let [{:keys [turtle]} @app-state]
+      (put! channel (g/turtle-transformation turtle))
       (.stopPropagation dom-event))))
 
 (defn reset-perspective-fn
+  "function to reset perspective"
   [app-state channel]
   (fn [dom-event]
-    (let [app @app-state
-          {:keys [triple]} app
-          trans (apply g/->Affine triple)]
-      (put! channel (g/inverse trans))
+    (let [{:keys [triple]} @app-state]
+      (put! channel (g/inverse-triple triple))
       (.stopPropagation dom-event))))
 
 (defn fn-button [name f]
@@ -98,10 +96,10 @@ and finally, create a transform from the orange turtle to the yellow turtle and 
             :class "command"} name])
 
 (defn perspective-buttons
-  [app-state channel]
+  [app-state perspective-channel]
   [:div
-   (fn-button "t2->st" (turtle-transform-fn app-state channel))
-   (fn-button "reset perspective" (reset-perspective-fn app-state channel))])
+   (fn-button "t2->st"            (turtle-transform-fn app-state perspective-channel))
+   (fn-button "reset perspective" (reset-perspective-fn app-state perspective-channel))])
 
 (defn svg-turtle [t user->user class-name]
   (let [f (mappings/user->screen user->user)
