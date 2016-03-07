@@ -75,7 +75,7 @@ and finally, create a transform from the orange turtle to the yellow turtle and 
    ["Rotate -15" (g/->Rotation -15)]])
 
 (defn turtle-transform-fn
-  "buttons to transforms perspective"
+  "buttons to transform perspective"
   [app-state channel]
   (fn [dom-event]
     (let [app @app-state
@@ -164,7 +164,7 @@ and finally, create a transform from the orange turtle to the yellow turtle and 
   "a transformation playground"
   (fn [app _] [transforms app])
   (reagent/atom initial-app-state)
-  {:history true})
+  {:inspect-data true :history true})
 
 (comment
   (in-ns 'hello-devcards.transforms)
