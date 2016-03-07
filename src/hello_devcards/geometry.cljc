@@ -81,7 +81,7 @@
   Affine
   (compose [{a1 :a b1 :b conj1 :conj} [a b conj]]
     (let [c (n/times a a1)
-          d (n/plus (n/times b a1) b)]
+          d (n/plus (n/times b a1) b1)]
       (if (false? conj1)
         [c d conj]
         [(n/conjugate c) (n/conjugate d) (toggle conj)])))
@@ -181,6 +181,9 @@
     (let [f (as-fn transformation)]
       (update-in point [:center] f))))
 
+(defn inverse-triple [triple]
+  (inverse (apply ->Affine triple)))
+
 (comment
   (require '[hello-devcards.geometry] :reload)
   (in-ns 'hello-devcards.geometry)
@@ -257,4 +260,26 @@
                (->Translation (n/c [2 3]))
                (->Reflection))))
   (transform standard-turtle (->Affine (n/c [2 3]) n/i false))
+
+  (= identity-triple (compose (inverse (->Affine n/one n/zero true)) [n/one n/zero true]))
+  ;;=> true
+
+  (let [t (->Translation (n/c [2 1]))
+        r (->Rotation 15)
+        d (->Dilation (/ 2))
+        c (->Composition (list t d r))
+        i (inverse c)]
+    (->> identity-triple
+         (compose c)
+         (compose i)
+         display-triple))
+  ;;=> [[1 0] [0 -1.1102230246251565e-16] false]
+
+  ;; Pan left, reset perspective
+  (let [trans (->Translation n/one)
+        triple (compose trans identity-triple)
+        i (inverse-triple triple)
+        res (compose i triple)]
+    (= res identity-triple))
+
   )
