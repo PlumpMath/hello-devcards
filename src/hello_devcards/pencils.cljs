@@ -1,4 +1,4 @@
-(ns hello-devcards.pencil
+(ns hello-devcards.pencils
   (:require
    [devcards.core]
    [complex.number :as n :refer [zero one i negative-one negative-i infinity add sub mult div]]
@@ -18,3 +18,18 @@
    [devcards.core :as dc :refer [defcard deftest defcard-rg defcard-doc]]
    [cljs.core.async.macros :refer [go]])
   (:import [goog.events EventType]))
+
+(defcard story
+  "
+# pulsating Pencils
+
+standard turtle, eigth mapping
+
+state consists of
+
+* lattice
+* vertical lines parallel to heading
+* horizontal lines perpendicular to heading
+* concentric circles about position
+* radial lines through position
+")

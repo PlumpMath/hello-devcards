@@ -9,6 +9,7 @@
    [hello-devcards.color-wheel]
    [hello-devcards.colored-polygon]
    [hello-devcards.transforms]
+   [hello-devcards.pencils]
    [reagent.core :as reagent]
    [sablono.core :as sab :include-macros true])
   (:require-macros
