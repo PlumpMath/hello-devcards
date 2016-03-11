@@ -28,5 +28,9 @@
   (async/>!! to-mult 43)
   (async/close! to-mult)
   )
-
+;; system tick
+;; a channel to send out ticks
+;; a return channel to collect tocks
+;; tick tock goes the clock
+;; once around in 60 ticks
 ;; pub sub
