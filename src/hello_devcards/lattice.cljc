@@ -18,6 +18,7 @@
 (defrecord Forward2 [d])
 
 (defprotocol CommandProcessor
+  "use command to update state and return new state"
   (process-command [command state]))
 
 (defn add-point [state]
@@ -72,7 +73,7 @@
 
 (defn make-line1
   "make lattice line along heading1 consisting of n steps forward and backward
-the returned turtle position is that same as in the given state
+  the returned turtle position is that same as in the given state
   the position of the turtle of the returned state
   is the same as that of the given state"
   [state n]
@@ -84,7 +85,7 @@ the returned turtle position is that same as in the given state
         (assoc-in [:turtle :position] initial-position))))
 
 (defn four-by-four-lattice
-  "make a lattice consisting of 4 setps in each of the four directions"
+  "make a lattice consisting of 4 steps in each of the four directions"
   [state]
   (let [initial-position (get-in state [:turtle :position])]
    (-> state
