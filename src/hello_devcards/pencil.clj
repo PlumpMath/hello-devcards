@@ -34,3 +34,6 @@
 ;; tick tock goes the clock
 ;; once around in 60 ticks
 ;; pub sub
+
+(defn sqawn-linear-turtle [inital-turtle ]
+  )
