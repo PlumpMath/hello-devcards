@@ -9,43 +9,20 @@
   (use 'clojure.repl)
   )
 
-
-;; mult
-(def to-mult (async/chan 1))
-
-(def m (async/mult to-mult))
-
-(comment
-
-  (let [c (async/chan 1)]
-    (async/tap m c)
-    (async/go (loop []
-                (when-let [v (async/<! c)]
-                  (println "Got! " v)
-                  (recur)))))
-
-  (async/>!! to-mult 42)
-  (async/>!! to-mult 43)
-  (async/close! to-mult)
-  )
 ;; system tick
 ;; a channel to send out ticks
-;; a return channel to collect tocks
-;; tick tock goes the clock
-;; once around in 60 ticks
-;; pub sub
 
 (def ticker-chan (async/chan 1))
 
-(def ticker-mult (async/mult ticker-chan))
+;; (def ticker-mult (async/mult ticker-chan))
 
 (defn send-n-ticks [n ch]
   (async/go-loop [i 0]
-    (println "waiting ....")
+    (println "waiting for timeout")
     (async/<! (async/timeout 1000))
-    (println (str "sending a system tick: " i))
+    (println (str "waiting to send system tick: " i))
     (async/>! ch [:tick i])
-    (println "tick sent")
+    (println "tick " i " sent")
     (if (< i n)
       (recur (inc i)))))
 
@@ -57,14 +34,26 @@
             (recur))
         (println :done)))))
 
+(defn back-pressure [tick-chan]
+  (let [bp (async/chan)]
+    (async/go (loop []
+          (when-let [tick (async/<! tick-chan)]
+            (async/>! bp :tock)
+            (recur))))
+    bp))
+
+(comment
+  (def ret-ch (back-pressure ticker-chan))
+  (send-n-ticks 10 ticker-chan)
+  (async/take! ret-ch #(println "ret-ch: " %))
+  )
+
 (comment
   (let [c (async/chan 1)]
     (async/tap ticker-mult c)
-    (process-ticks c)
-    (async/untap ticker-mult c))
+    (process-ticks c))
 
   (send-n-ticks 10 ticker-chan)
-
   )
 
 (defn sqawn-linear-turtle [inital-turtle ]
