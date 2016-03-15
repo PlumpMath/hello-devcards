@@ -89,3 +89,7 @@
    It is a nice little bit of algebra that makes a direct connection with geometry,
    using turtle graphics to illuminate and animate the process. And in the process,
    Pythagorean triples are generated.
+
+   #+BEGIN_SRC clojure
+   [2n/(n^2 - 1), (n^2 + 1)/(n^2 - 1)]
+   #+END_SRC
