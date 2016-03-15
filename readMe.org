@@ -81,7 +81,7 @@
    [[http://wbabic.github.io/hello-devcards/#!/hello_devcards.transforms]]
 ** turtle transforms
    A playground for exploring
-   interaction of turtles and transformations
+   interaction of turtles and transformations.
 
    Transformations are applied to a turtle
    as well as to the perspective mapping.
@@ -93,6 +93,10 @@
    Every transformation has an inverse.
 
    Geometric objects are Transformable.
+
+   A transform is itself Transformable.
+
+   see geometry.cljc
 
 ** projective turtle
    [[http://wbabic.github.io/hello-devcards/#!/hello_devcards.projective_turtle]]
@@ -118,3 +122,16 @@
    Here we see how a turtle can generate
    pencils of parallel lines,
    concentric circles and radial lines.
+** the notion of motion
+   Connect the mind to the physical world by imagining applying motions to to a virtual turtle.
+   Motions like Move, Turn, and Resize connect tangible ideas to transformations.
+
+   Connecting algebraic operations of addition and multiplication to
+   turtle motions and
+   geometric notions of translation, rotation and dilation.
+
+   They are tools for thinking.
+
+   Pencils illuminate space like tracer bullets.
+
+   Create Mobius transformations by adding the reciprocal.
