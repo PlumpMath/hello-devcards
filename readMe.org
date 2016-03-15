@@ -78,13 +78,14 @@
 ** projective turtle
    Use the concept of a virtual turtle
    sent forth along the x-axis
-   taking one step at a time
+   taking one step at a time.
 
    The original turtle remains fixed
    and with each step, draws a line from i (eye)
    to the virtual turtle
-   and in this way, projects a line to a circle
+   and in this way, projects a line to a circle.
 
    The turtle math involves finding the intersection of a line and a circle.
    It is a nice little bit of algebra that makes a direct connection with geometry,
-   using turtle graphics to illuminate and animate the process.
+   using turtle graphics to illuminate and animate the process. And in the process,
+   Pythagorean triples are generated.
