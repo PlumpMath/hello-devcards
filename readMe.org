@@ -79,6 +79,21 @@
    See latice.cljc and
 
    [[http://wbabic.github.io/hello-devcards/#!/hello_devcards.transforms]]
+** turtle transforms
+   A playground for exploring
+   interaction of turtles and transformations
+
+   Transformations are applied to a turtle
+   as well as to the perspective mapping.
+
+   Turtles can also generate transformations.
+
+   A sequence of transformations can be composed or reduced to a single transformation.
+
+   Every transformation has an inverse.
+
+   Geometric objects are Transformable.
+
 ** projective turtle
    [[http://wbabic.github.io/hello-devcards/#!/hello_devcards.projective_turtle]]
 
@@ -99,3 +114,7 @@
    #+BEGIN_SRC clojure
    [2n/(n^2 - 1), (n^2 + 1)/(n^2 - 1)]
    #+END_SRC
+** pulsating pencils
+   Here we see how a turtle can generate
+   pencils of parallel lines,
+   concentric circles and radial lines.
