@@ -21,7 +21,7 @@
 
 (defcard story
   "
-# pulsating Pencils
+# Pulsating Pencils
 
 standard turtle, eigth mapping
 

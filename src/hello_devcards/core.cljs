@@ -10,6 +10,7 @@
    [hello-devcards.colored-polygon]
    [hello-devcards.transforms]
    [hello-devcards.pencils]
+   [hello-devcards.projective-turtle]
    [reagent.core :as reagent]
    [sablono.core :as sab :include-macros true])
   (:require-macros

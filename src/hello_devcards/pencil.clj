@@ -20,6 +20,7 @@
   (async/go-loop [i 0]
     (println "waiting for timeout")
     (async/<! (async/timeout 1000))
+    (println)
     (println (str "waiting to send system tick: " i))
     (async/>! ch [:tick i])
     (println "tick " i " sent")

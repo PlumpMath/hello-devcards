@@ -110,6 +110,23 @@
        (n/plus (n/times a z) b)
        (n/plus (n/times a (n/conjugate z)) b)))))
 
+(defn fractional-mapping
+  "a mapping from the complex numbers into screen coordinates
+  of the given resolution
+  where:
+  zero is mapped to the midpoint and
+  four steps (or two doubles) gets a turtle to the edge and
+  up is really up"
+  [fraction resolution]
+  (let [r (* resolution fraction)
+        m (/ resolution 2)
+        screen-midpoint (n/c [m m])]
+    (->Composition
+     (list
+      (->Reflection)
+      (->Dilation r)
+      (->Translation screen-midpoint)))))
+
 (defn eigth
   "a mapping from the complex numbers into screen coordinates
   of the given resolution
@@ -118,14 +135,10 @@
   four steps (or two doubles) gets a turtle to the edge and
   up is really up"
   [resolution]
-  (let [r (/ resolution 8)
-        m (/ resolution 2)
-        screen-midpoint (n/c [m m])]
-    (->Composition
-     (list
-      (->Reflection)
-      (->Dilation r)
-      (->Translation screen-midpoint)))))
+  (fractional-mapping (/ 8) resolution))
+
+(defn quarter [resolution] (fractional-mapping (/ 4) resolution))
+(defn half    [resolution] (fractional-mapping (/ 2) resolution))
 
 (defprotocol Transformable
   (transform [object transformation]))
