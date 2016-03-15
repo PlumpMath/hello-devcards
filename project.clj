@@ -21,6 +21,7 @@
                  [ring/ring-core "1.4.0"]
                  [clj-time "0.9.0"]
 
+                 [fipp "0.6.4"]
                  ]
 
   :plugins [[lein-cljsbuild "1.1.2"]

@@ -7,7 +7,8 @@
    [hello-devcards.chessboard]
    [hello-devcards.color-wheel]
    [hello-devcards.colored-polygon]
-   [hello-devcards.transforms])
+   [hello-devcards.transforms]
+   [hello-devcards.projective-turtle])
   (:require-macros
    [devcards.core :as dc :refer [defcard deftest defcard-rg defcard-doc]]))
 
