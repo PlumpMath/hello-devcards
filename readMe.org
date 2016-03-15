@@ -61,7 +61,7 @@
 
    [[http://wbabic.github.io/hello-devcards/#!/hello_devcards.colored_polygon]]
 ** lattice turtle
-   a lattice turtle has a position and two heading vectors
+   A lattice turtle has a position and two heading vectors
 
    the lattice turtle can
 
@@ -75,3 +75,16 @@
            standard-turtle
            turtle-program)
    #+END_SRC
+** projective turtle
+   Use the concept of a virtual turtle
+   sent forth along the x-axis
+   taking one step at a time
+
+   The original turtle remains fixed
+   and with each step, draws a line from i (eye)
+   to the virtual turtle
+   and in this way, projects a line to a circle
+
+   The turtle math involves finding the intersection of a line and a circle.
+   It is a nice little bit of algebra that makes a direct connection with geometry,
+   using turtle graphics to illuminate and animate the process.
