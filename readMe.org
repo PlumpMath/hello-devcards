@@ -75,7 +75,13 @@
            standard-turtle
            turtle-program)
    #+END_SRC
+
+   See latice.cljc and
+
+   [[http://wbabic.github.io/hello-devcards/#!/hello_devcards.transforms]]
 ** projective turtle
+   [[http://wbabic.github.io/hello-devcards/#!/hello_devcards.projective_turtle]]
+
    Use the concept of a virtual turtle
    sent forth along the x-axis
    taking one step at a time.
