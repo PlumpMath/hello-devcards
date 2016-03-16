@@ -72,6 +72,12 @@ of the form [0 0] [1 0] [2 0] [3 0]
   [state-atom]
   (swap! state-atom reset-state))
 
+(defn update-perspective [state transform]
+  (update-in state [:triple] (fn [t] (g/compose transform t))))
+
+(defn update-perspective-atom [state-atom transform]
+  (swap! state-atom #(update-perspective % transform)))
+
 (defn function-button
   [name f]
   [:button {:on-click f :class "command"} name])
@@ -79,8 +85,10 @@ of the form [0 0] [1 0] [2 0] [3 0]
 (defn function-buttons
   [app-state]
   [:div
-   (function-button "Step"  (fn [_] (update-state-atom app-state)))
-   (function-button "Reset" (fn [_] (reset-state-atom app-state)))])
+   (function-button "Step"     (fn [_] (update-state-atom app-state)))
+   (function-button "Reset"    (fn [_] (reset-state-atom app-state)))
+   (function-button "Zoom In"  (fn [_] (update-perspective-atom app-state (g/->Dilation 2))))
+   (function-button "Zoom Out" (fn [_] (update-perspective-atom app-state (g/->Dilation (/ 2)))))])
 
 (comment
   (in-ns 'hello-devcards.projective-turtle)
@@ -141,11 +149,12 @@ of the form [0 0] [1 0] [2 0] [3 0]
 (defn projective-turtle
   [app-state]
   (let [app @app-state
-        {:keys [resolution mapping triple standard-turtle positions]} app
+        {:keys [resolution mapping triple standard-turtle virtual-turtle positions]} app
         user->user (apply g/as-fn (g/compose mapping triple))]
     [:div
      (function-buttons app-state)
      [:svg {:width resolution :height resolution :class "turtle"}
+      (svg-turtle virtual-turtle user->user "virtual-turtle")
       (svg-turtle standard-turtle user->user "turtle")
       (projective-lines standard-turtle positions user->user)]]))
 
@@ -153,4 +162,4 @@ of the form [0 0] [1 0] [2 0] [3 0]
   "A turtle projected"
   (fn [app _] [projective-turtle app])
   (reagent/atom medium-res-initial-state-quarter)
-  {:inspect-data true :history true})
+  {:history true})

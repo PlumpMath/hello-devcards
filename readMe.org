@@ -1,6 +1,10 @@
 * hello devcards
   An exploration of turtle programming using
   svg, reagent, core.async and devcards.
+
+  The goal being to connect geometry, number and algebra
+  through computer programming and computer graphics.
+
 ** usage
    This requires my complex library which is not yet in clojars.
 
@@ -119,9 +123,14 @@
    [2n/(n^2 - 1), (n^2 + 1)/(n^2 - 1)]
    #+END_SRC
 ** pulsating pencils
+   http://localhost:3449/cards.html#!/hello_devcards.pencils
+
    Here we see how a turtle can generate
    pencils of parallel lines,
    concentric circles and radial lines.
+
+   see pencil.cljc
+
 ** the notion of motion
    Connect the mind to the physical world by imagining applying motions to to a virtual turtle.
    Motions like Move, Turn, and Resize connect tangible ideas to transformations.
@@ -134,4 +143,10 @@
 
    Pencils illuminate space like tracer bullets.
 
-   Create Mobius transformations by adding the reciprocal.
+   Create Mobius transformations by adding the reciprocal transformation,
+   that sends z to 1/z
+   where z = 0 is allowed and yields infinity,
+   motivated by stereographic projection.
+
+   See a line as a generalized circle and Mobius transformations
+   as circle preserving mappings (in the generalized sense).
