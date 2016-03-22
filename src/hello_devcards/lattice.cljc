@@ -121,6 +121,7 @@
 (comment
   (require '[hello-devcards.lattice] :reload)
   (in-ns 'hello-devcards.lattice)
+  (use 'clojure.repl)
   (process-command (->Forward1 1) initial-state)
   (process-command (->Forward1 -1) initial-state)
   (process-command (->Forward2 1) initial-state)
