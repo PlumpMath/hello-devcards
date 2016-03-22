@@ -2,7 +2,8 @@
   (:refer-clojure :exclude [double])
   (:require
    [hello-devcards.polygon :as poly]
-   [hello-devcards.complex :as turtle]))
+   [hello-devcards.complex :as turtle]
+   [hello-devcards.polygon :as poly]))
 
 ;; Sierpensky gasket
 ;; turtle transformations
@@ -79,3 +80,63 @@
   (first (sierp2 2 :turtle))
   ;;=> {:poly [[:resize 1/2] [[:resize 1/2] :turtle]]}
 )
+
+(defn sierp3
+  [n]
+  (if (= n 0)
+    [:poly 3]
+    [:repeat 3
+     [:resize (/ 2)]
+     (sierp3 (dec n))
+     [:resize 2]
+     [:move 1]
+     [:turn 120]])
+  )
+
+(comment
+  (sierp3 0)
+  ;;=> [:poly 3]
+  (sierp3 1)
+  ;;=> [:repeat 3 [:resize 0.5] [:poly 3] [:resize 2] [:move 1] [:turn 120]]
+  (sierp3 2)
+  [:repeat 3
+   [:resize 0.5]
+   [:repeat 3
+    [:resize 0.5]
+    [:poly 3]
+    [:resize 2]
+    [:move 1]
+    [:turn 120]]
+   [:resize 2]
+   [:move 1]
+   [:turn 120]]
+  )
+
+(defn polygon
+  "turtle program for drawing a regular polygon"
+  [n]
+  (let [a (/ 360 n)]
+    (flatten
+     (list
+      (poly/->BeginPoly)
+      (repeat n
+              (list
+               (poly/->Forward 1)
+               (poly/->Turn a)
+               (poly/->Point)
+               (poly/->Pause 200)))
+      (poly/->ClosePoly)))))
+
+(defn sierp4
+  "produce one big long flat sequence of poly data"
+  [n]
+  (if (= n 0)
+    (polygon 3)
+    (flatten
+     (repeat 3
+             (list
+              (poly/->Resize (/ 2))
+              (sierp4 (dec n))
+              (poly/->Resize 2)
+              (poly/->Forward 1)
+              (poly/->Turn 120))))))

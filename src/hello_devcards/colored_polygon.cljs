@@ -7,15 +7,11 @@
    [hello-devcards.utils :as u]
    [hello-devcards.mappings :as mappings]
    [hello-devcards.svg :as svg]
-   [sablono.core :as sab :include-macros true]
    [reagent.core :as reagent]
    [cljs.core.async :as async :refer [>! <! put! chan alts! timeout]])
   (:require-macros
    [devcards.core :as dc :refer [defcard deftest defcard-rg defcard-doc]]
    [cljs.core.async.macros :refer [go]]))
-
-(def initial-app-state
-  (u/app-state 320))
 
 (defn polygon [{:keys [class-name color points]}]
   (apply svg/polygon class-name color points))
