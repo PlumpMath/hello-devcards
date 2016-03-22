@@ -11,3 +11,7 @@
   (:require-macros
    [devcards.core :as dc :refer [defcard deftest defcard-rg defcard-doc]]
    [cljs.core.async.macros :refer [go]]))
+
+(defcard story
+  "
+# Sierpensky Gasket")

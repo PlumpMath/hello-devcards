@@ -11,6 +11,7 @@
    [hello-devcards.transforms]
    [hello-devcards.pencils]
    [hello-devcards.projective-turtle]
+   [hello-devcards.sierpensky]
    [reagent.core :as reagent]
    [sablono.core :as sab :include-macros true])
   (:require-macros
