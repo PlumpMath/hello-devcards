@@ -8,7 +8,8 @@
    [hello-devcards.color-wheel]
    [hello-devcards.colored-polygon]
    [hello-devcards.transforms]
-   [hello-devcards.projective-turtle])
+   [hello-devcards.projective-turtle]
+   [hello-devcards.sierpensky])
   (:require-macros
    [devcards.core :as dc :refer [defcard deftest defcard-rg defcard-doc]]))
 
