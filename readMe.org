@@ -122,6 +122,14 @@
    #+BEGIN_SRC clojure
    [2n/(n^2 - 1), (n^2 + 1)/(n^2 - 1)]
    #+END_SRC
+** recursive turtle
+   http://wbabic.github.io/hello-devcards/#!/hello_devcards.sierpensky
+
+   A turtle program which calls itself recursively.
+
+   An animation of a recursive turtle program drawing one triangle at a time
+   to make a Sierpensky gasket.
+
 ** pulsating pencils
    http://localhost:3449/cards.html#!/hello_devcards.pencils
 
