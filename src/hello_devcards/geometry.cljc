@@ -23,12 +23,13 @@
 ;; geometric objects
 (defrecord Circle [center radius])
 (defrecord Point [center])
-(defrecord Turtle [position length angle])
+(defrecord Turtle [position length angle orientation])
 
 (def standard-turtle (map->Turtle turtle/initial-turtle))
 
 (defn turtle-transformation
-  "return the transformation that maps the given turtle to the standard turtle"
+  "return the transformation that maps the given turtle
+  to the standard turtle position"
   [{:keys [position length angle]}]
   (->Composition
    (list
@@ -143,6 +144,11 @@
 (defprotocol Transformable
   (transform [object transformation]))
 
+(defn toggle-orientation [orientation]
+  (if (= orientation :counter-clockwise)
+    :clockwise
+    :counter-clockwise))
+
 (extend-protocol Transformable
   Turtle
   (transform [turtle transformation]
@@ -154,7 +160,8 @@
         (instance? Reflection transformation)
         (-> turtle
             (update-in [:position] f)
-            (update-in [:angle] #(- %)))
+            (update-in [:angle] #(- %))
+            (update-in [:orientation] toggle-orientation))
 
         (instance? Rotation transformation)
         (let [angle (:angle transformation)]

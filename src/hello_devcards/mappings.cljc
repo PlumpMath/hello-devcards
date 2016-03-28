@@ -22,6 +22,7 @@
   (mapv round c))
 
 (def to-screen
+  "maps a complex number into rounded coordinates"
   (comp round-c n/coords))
 
 (defn user->screen

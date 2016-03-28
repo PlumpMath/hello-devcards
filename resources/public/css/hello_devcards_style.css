@@ -39,11 +39,17 @@ polyline {
 }
 g#turtle {
   stroke: black;
-  fill: yellow;
+  fill: hsla(270, 100%, 50%, 0.2);
 }
 g#turtle2 {
   stroke: black;
-  fill: orange;
+  fill: transparent;
+}
+polygon.left {
+  fill: hsla(330, 100%, 50%, 0.5);
+}
+polygon.right {
+ fill: hsla(150, 100%, 50%, 0.5);
 }
 g#lattice {
   stroke: black;

@@ -5,7 +5,8 @@
 (def initial-turtle
   {:position n/zero
    :length 1
-   :angle 0})
+   :angle 0
+   :orientation :counter-clockwise})
 
 (defn heading [turtle]
   (let [{:keys [length angle]} turtle]
@@ -62,6 +63,16 @@
     (cond
       (< length 1) (assoc-in turtle [:length] 1)
       :else (update-in turtle [:length] inc))))
+
+(defn toggle-orientation [orientation]
+  (if (= orientation :counter-clockwise)
+    :clockwise
+    :counter-clockwise))
+
+(defn reflect
+  "reflect turtle in line along heading"
+  [turtle]
+  (update-in turtle [:orientation] toggle-orientation))
 
 (defn length->lightness [length]
   (cond

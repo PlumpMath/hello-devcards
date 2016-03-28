@@ -94,8 +94,10 @@ and finally, create a transform from the orange turtle to the yellow turtle and 
 (defn perspective-buttons
   [app-state perspective-channel]
   [:div
-   (fn-button "t2->st"            (turtle-transform-fn app-state perspective-channel))
-   (fn-button "reset perspective" (reset-perspective-fn app-state perspective-channel))])
+   (fn-button "t2->st"
+              (turtle-transform-fn app-state perspective-channel))
+   (fn-button "reset perspective"
+              (reset-perspective-fn app-state perspective-channel))])
 
 (defn svg-turtle [t user->user class-name]
   (let [f (mappings/user->screen user->user)
@@ -108,6 +110,29 @@ and finally, create a transform from the orange turtle to the yellow turtle and 
                    (svg/circle pos l)
                    (svg/circle pos 3)
                    (svg/line pos tip))))
+
+(defn square-turtle [turtle user->user class-name]
+  (let [f (mappings/user->screen user->user)
+        {:keys [position length angle orientation]} turtle
+        heading (n/complex-polar length angle)
+        t (turtle/tip turtle)
+        o (if (= orientation :clockwise) -1 1)
+        left (n/complex-polar length (+ (* o 90) angle))
+        right (n/complex-polar length (+ (* -1 o 90) angle))
+        pos (f position)
+        tip (f t)
+        left (f (n/add position left))
+        right (f (n/add position right))
+        l (n/length (n/sub (user->user position) (user->user t)))]
+    (svg/group-svg class-name
+                   (svg/circle pos l)
+                   (svg/circle pos 3)
+                   (svg/circle left 3)
+                   (svg/circle right 3)
+                   (svg/circle tip 3)
+                   (svg/line pos tip)
+                   (svg/polygon "left" nil pos tip left)
+                   (svg/polygon "right" nil pos tip right))))
 
 (def lattice-points
   (:points (lattice/four-by-four-lattice lattice/initial-state)))
@@ -128,7 +153,6 @@ and finally, create a transform from the orange turtle to the yellow turtle and 
 (defn process-perspective-chan [channel state]
   (go (loop []
         (let [transform (<! channel)]
-          (println transform)
           (swap! state #(update-in % [:triple] (fn [t] (g/compose transform t))))
           (recur)))))
 
@@ -151,7 +175,7 @@ and finally, create a transform from the orange turtle to the yellow turtle and 
      (perspective-buttons app-state perspective-chan)
      [:svg {:width resolution :height resolution :class "board"}
       (svg-turtle (:st app) user->user "turtle")
-      (svg-turtle (:turtle app) user->user "turtle2")
+      (square-turtle (:turtle app) user->user "turtle2")
       (render-lattice lattice-points f)]]))
 
 (defcard-rg transform-card
