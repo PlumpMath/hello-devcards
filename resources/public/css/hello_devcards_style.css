@@ -62,3 +62,23 @@ polygon.red {
 g#projective-lines {
   stroke: orange;
 }
+polygon.forward-arrow {
+  stroke: transparent;
+  fill: hsla(240, 100%, 50%, 0.8);
+}
+polygon.backward-arrow {
+  stroke: transparent;
+  fill: hsla(60, 100%, 50%, 0.8);
+}
+polygon.left-arrow {
+  stroke: transparent;
+  fill: hsla(330, 100%, 50%, 0.8);
+}
+polygon.right-arrow {
+  stroke: transparent;
+  fill: hsla(150, 100%, 50%, 0.8);
+}
+div.control-panel circle {
+  fill: transparent;
+  stroke: pink;
+}

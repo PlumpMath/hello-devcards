@@ -9,6 +9,7 @@
    [hello-devcards.mappings :as mappings]
    [hello-devcards.svg :as svg]
    [hello-devcards.geometry :as g]
+   [hello-devcards.control-panel :as control-panel]
    [reagent.core :as reagent]
    [cljs.core.async :as async :refer [>! <! put! chan alts! timeout]])
   (:require-macros
@@ -169,14 +170,15 @@ and finally, create a transform from the orange turtle to the yellow turtle and 
         _ (process-transform-chan transform-chan app-state)
         _ (process-perspective-chan perspective-chan app-state)]
     [:div
-     (u/command-buttons ui-chan button-set-1)
      (u/command-buttons transform-chan button-set-2)
      (u/command-buttons perspective-chan button-set-3)
      (perspective-buttons app-state perspective-chan)
      [:svg {:width resolution :height resolution :class "board"}
       (svg-turtle (:st app) user->user "turtle")
       (square-turtle (:turtle app) user->user "turtle2")
-      (render-lattice lattice-points f)]]))
+      (render-lattice lattice-points f)]
+     (u/command-buttons ui-chan button-set-1)
+     (control-panel/control-panel 100 ui-chan)]))
 
 (defcard-rg transform-card
   "a transformation playground"

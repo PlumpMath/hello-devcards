@@ -12,6 +12,7 @@
    [hello-devcards.pencils]
    [hello-devcards.projective-turtle]
    [hello-devcards.sierpensky]
+   [hello-devcards.control-panel]
    [reagent.core :as reagent]
    [sablono.core :as sab :include-macros true])
   (:require-macros
