@@ -87,6 +87,54 @@
 (defn mobius
   [a b c d] (->Mobius a b c d))
 
+(def identity-triple [n/one n/zero false])
+
+(defn display-triple [[a b conj]]
+  (let [f n/coords]
+    [(f a) (f b) conj]))
+
+(defn toggle [conj]
+  (if (true? conj) false true))
+
+(defn reduce-triple
+  "apply a transform to triple"
+  [transform [a b conj]]
+  (condp instance? transform
+    Reflection
+    [(n/conjugate a) (n/conjugate b) (toggle conj)]
+    Dilation
+    (let [r (:ratio transform)]
+      [(n/times a r) (n/times b r) conj])
+    Rotation
+    (let [angle (:angle transform)
+          w (n/complex-polar angle)]
+      [(n/times a w) (n/times b w) conj])
+    Translation
+    (let [v (:v transform)]
+      [a (n/plus b v) conj])
+    Affine
+    (let [{:keys [a1 b1]} transform
+          c (n/times a a1)
+          d (n/plus (n/times b a1) b1)]
+      [c d conj])
+    Composition
+    (let [sequence (:sequence transform)]
+      (reduce
+       (fn [triple transform]
+         (reduce-triple transform triple))
+       [a b conj]
+       sequence))))
+
+(defn reduce-composition
+  "reduce a composition into a single transformation"
+  [composition]
+  (let [sequence (:sequence composition)
+        [a b conj] (reduce-triple composition identity-triple)
+        affine (->Affine a b)]
+    (if (false? conj)
+      affine
+      (->Composition (list affine (->Reflection))))))
+
 (defprotocol Transformable
   (transform [object transformation]))
 
@@ -263,4 +311,16 @@
        reflect))
   ;;=> {:position [10.0 0.0], :heading {:length 2.0, :angle 45.0}, :orientation :clockwise}
 
+  ;; reduce-triple
+  (display-triple (reduce-triple (->Reflection) identity-triple))
+  (let [t (->Composition (list (->Rotation 45)
+                               (->Translation n/one)
+                               (->Reflection)))]
+    (display-triple (reduce-triple t identity-triple)))
+
+  ;; reduce composition
+  (let [t (->Composition (list (->Rotation 45)
+                               (->Translation n/one)
+                               (->Reflection)))]
+    (reduce-composition t))
   )
