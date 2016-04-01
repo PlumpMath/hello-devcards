@@ -28,8 +28,8 @@
 (def command-button-set-1
   [["Forward"  (polygon/->Forward 1)]
    ["Backward" (polygon/->Forward -1)]
-   ["Left15"     (polygon/->Turn 15)]
-   ["Right15"    (polygon/->Turn -15)]
+   ["Left15"   (polygon/->Turn 15)]
+   ["Right15"  (polygon/->Turn -15)]
    ["Half"     (polygon/->Resize (/ 2))]
    ["Double"   (polygon/->Resize 2)]])
 
