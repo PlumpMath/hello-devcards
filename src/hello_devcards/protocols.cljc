@@ -125,7 +125,13 @@
     (-> turtle
         (update-in [:position] #(transform % transformation))
         (update-in [:heading] #(transform % transformation))
-        (update-in [:orientation] toggle-orientation))))
+        (update-in [:orientation] toggle-orientation)))
+  Number
+  (transform [number transformation]
+    (let [z (n/c [number 0])
+          f (transform-fn transformation)
+          w (f z)]
+      (n/length w))))
 
 (extend-protocol Turtle
   Complex-Turtle

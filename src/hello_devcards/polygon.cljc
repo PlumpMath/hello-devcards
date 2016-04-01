@@ -19,8 +19,7 @@
                  #(mapv
                    (fn [poly]
                      (-> poly
-                         (update-in
-                          [:points]
+                         (update-in [:points]
                           (fn [points] (mapv f points)))))
                    %))))
 

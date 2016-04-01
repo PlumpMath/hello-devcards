@@ -14,16 +14,17 @@
    [devcards.core :as dc :refer [defcard deftest defcard-rg defcard-doc]]
    [cljs.core.async.macros :refer [go]]))
 
+
 (defcard story
   "
 # Sierpensky Gasket")
 
 (def program-button-set-1
   [["Triangle"     (recursive/polygon 3)]
-   ["Sierpenski 0" (recursive/sierp4 0)]
-   ["Sierpenski 1" (recursive/sierp4 1)]
-   ["Sierpenski 2" (recursive/sierp4 2)]
-   ["Sierpenski 3" (recursive/sierp4 3)]])
+   ["Sierpenski 0" (recursive/sierp 0)]
+   ["Sierpenski 1" (recursive/sierp 1)]
+   ["Sierpenski 2" (recursive/sierp 2)]
+   ["Sierpenski 3" (recursive/sierp 3)]])
 
 (def command-button-set-1
   [["Forward"  (polygon/->Forward 1)]
@@ -52,7 +53,6 @@
         {:keys [resolution turtle current-color]} app
         f (mappings/eigth resolution)
         ui-chan (chan)
-        color-chan (chan)
         _ (u/process-channel ui-chan app-state)
         a (polygon/transform-state f app)
         points (:points a)
