@@ -20,7 +20,7 @@
   (resize [turtle r])
   (reflect [turtle]))
 
-(defrecord Complex-Turtle [position heading orientation])
+(defrecord ComplexTurtle [position heading orientation])
 
 (defn turtle
   "turtle constructor function taking either
@@ -29,7 +29,7 @@
   ([position length angle]
    (turtle (point position) (complex-vector length angle)))
   ([position heading]
-   (->Complex-Turtle position heading (->Orientation :counter-clockwise))))
+   (->ComplexTurtle position heading (->Orientation :counter-clockwise))))
 
 (def initial-turtle (turtle n/zero 1 0))
 
@@ -147,62 +147,49 @@
   Vector
   (transform [vector transformation]
     (let [f (transform-fn transformation)]
-      (cond
-        (instance? Translation transformation)
+      (condp instance? transformation
+        Translation
         ;; translation does not effect vectors
         vector
-
-        (instance? Reflection transformation)
+        Reflection
         (update-in vector [:z] n/conjugate)
-
-        (instance? Rotation transformation)
+        Rotation
         (let [{:keys [angle]} transformation]
           (update-in vector [:z] #(n/times (n/complex-polar angle) %)))
-
-        (instance? Dilation transformation)
+        Dilation
         (let [{:keys [ratio]} transformation]
           (update-in vector [:z] #(n/times % ratio)))
-
-        (instance? Affine transformation)
+        Affine
         (let [{:keys [a b]} transformation]
           (update-in vector [:z] #(n/times a %)))
-
-        (instance? Composition transformation)
+        Composition
         (reduce transform vector (:sequence transformation)))))
   Point
   (transform [point transformation]
     (update-in point [:z] (transform-fn transformation)))
 
-  Complex-Turtle
+  ComplexTurtle
   (transform [turtle transformation]
     (-> turtle
         (update-in [:position] #(transform % transformation))
         (update-in [:heading] #(transform % transformation))
         (update-in [:orientation] #(transform % transformation))))
-  Number
-  (transform [number transformation]
-    (let [z (n/c [number 0])
-          f (transform-fn transformation)
-          w (f z)]
-      (n/length w)))
+
   Orientation
   (transform [orientation transformation]
-    (cond
-      (instance? Reflection transformation)
+    (condp instance? transformation
+      Reflection
       (update-in orientation [:keyword] toggle-orientation)
-
-      (instance? Composition transformation)
+      Composition
       (reduce
        (fn [orien trans]
          (transform orien trans))
        orientation
        (:sequence transformation))
-
-      :else
       orientation)))
 
 (extend-protocol Turtle
-  Complex-Turtle
+  ComplexTurtle
   (move [{position :position heading :heading :as turtle} d]
     (update-in turtle [:position]
                #(transform % (->Translation
@@ -277,6 +264,7 @@
         n/coords))
   ;;=> [0.7071067811865476 -0.7071067811865475]
 
+  ;; transform an Orientation
   (let [t (->Composition (list (->Rotation 45) (->Reflection)))]
     (-> (->Orientation :clockwise)
         (transform t)
@@ -296,7 +284,8 @@
         n/coords))
   ;;=>
 
-  (display-turtle (transform initial-turtle (->Composition (list (->Rotation 45) (->Reflection)))))
+  (display-turtle
+   (transform initial-turtle (->Composition (list (->Rotation 45) (->Reflection)))))
 
   (display-turtle (move initial-turtle 1))
   (display-turtle (turn initial-turtle 15))
@@ -318,7 +307,7 @@
                                (->Reflection)))]
     (display-triple (reduce-triple t identity-triple)))
 
-  ;; reduce composition
+  ;; reduce-composition
   (let [t (->Composition (list (->Rotation 45)
                                (->Translation n/one)
                                (->Reflection)))]
