@@ -2,7 +2,6 @@
   (:require
    [devcards.core]
    [complex.number :as n :refer [zero one i negative-one negative-i infinity add sub mult div]]
-   [complex.vector :as v]
    [reagent.core :as reagent]
    [sablono.core :as sab :include-macros true]
    [goog.events :as events])

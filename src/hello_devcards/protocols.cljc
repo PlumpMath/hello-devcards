@@ -78,7 +78,7 @@
   (inverse [{sequence :sequence}]
     (->Composition (reverse (map inverse sequence))))
   (transform-fn [{sequence :sequence}]
-    (apply comp (map transform-fn sequence))))
+    (apply comp (reverse (map transform-fn sequence)))))
 
 (defrecord Mobius [a b c d])
 (defrecord Inversion [])
@@ -168,13 +168,6 @@
   (transform [point transformation]
     (update-in point [:z] (transform-fn transformation)))
 
-  ComplexTurtle
-  (transform [turtle transformation]
-    (-> turtle
-        (update-in [:position] #(transform % transformation))
-        (update-in [:heading] #(transform % transformation))
-        (update-in [:orientation] #(transform % transformation))))
-
   Orientation
   (transform [orientation transformation]
     (condp instance? transformation
@@ -186,7 +179,14 @@
          (transform orien trans))
        orientation
        (:sequence transformation))
-      orientation)))
+      orientation))
+
+  ComplexTurtle
+  (transform [turtle transformation]
+    (-> turtle
+        (update-in [:position] #(transform % transformation))
+        (update-in [:heading] #(transform % transformation))
+        (update-in [:orientation] #(transform % transformation)))))
 
 (extend-protocol Turtle
   ComplexTurtle
@@ -202,7 +202,7 @@
     (update-in turtle [:heading]
                #(transform % (->Dilation r))))
   (reflect [turtle]
-    (update-in turtle [:orientation]
+    (update-in turtle [:orientation :keyword]
                toggle-orientation)))
 
 (defn display-turtle
@@ -213,6 +213,45 @@
      :heading {:length (n/length heading)
                :angle ((comp n/rad->deg n/arg) heading)}
      :orientation (get-in complex-turtle [:orientation :keyword])}))
+
+;; turtle centric transformations
+;; first, the transformation that brings a turtle home
+(defn turtle-home-trans
+  "the transformation that brings a turtle home"
+  [turtle]
+  (let [{:keys [position heading orientation]} turtle
+        v (:z heading)
+        o (:keyword orientation)]
+    (if (= o :counter-clockwise)
+      (->Composition
+       (list
+        (inverse (->Translation (:z position)))
+        (inverse (->Rotation (n/rad->deg (n/arg v))))
+        (inverse (->Dilation (n/length v)))))
+      (->Composition
+       (list
+        (inverse (->Translation (:z position)))
+        (inverse (->Rotation (n/rad->deg (n/arg v))))
+        (inverse (->Dilation (n/length v)))
+        (->Reflection))))))
+
+(defn conjugate
+  "conjugate of g by f"
+  [f g]
+  (->Composition
+   (list (inverse f) g f)))
+
+;; rotation about a point
+(defn rotation
+  "a rotation about point p by theta"
+  [p theta]
+  (conjugate (->Translation p) (->Rotation theta)))
+
+(defn turtle-centric-trans
+  "perform given transformation
+  wrt given turtle"
+  [turtle trans]
+  (conjugate (turtle-home-trans turtle) trans))
 
 (comment
   (require '[hello-devcards.protocols] :reload)
@@ -231,6 +270,10 @@
                             (list (->Reflection) (->Rotation 45))))
              n/one))
   ;;=> [0.7071067811865476 -0.7071067811865475]
+  (n/coords ((transform-fn (->Composition
+                            (list (->Translation (n/c [86 49])))))
+             n/one))
+  ;;=> [87 49]
 
   ;; inverse of a transform is a transform
   (inverse (->Translation n/one))
@@ -282,7 +325,7 @@
         (transform t)
         :z
         n/coords))
-  ;;=>
+  ;;=> [0.7071067811865476 -0.7071067811865475]
 
   (display-turtle
    (transform initial-turtle (->Composition (list (->Rotation 45) (->Reflection)))))
@@ -312,4 +355,18 @@
                                (->Translation n/one)
                                (->Reflection)))]
     (reduce-composition t))
+
+  ;; turtle-home-trans
+  (clojure.pprint/pprint
+   (let [turtle (-> initial-turtle
+                    (turn 30)
+                    (move 100)
+                    (resize 3)
+                    (reflect))
+         home-trans (turtle-home-trans turtle)
+         trans-turtle (transform turtle home-trans)]
+     [(display-turtle turtle)
+      home-trans
+      (display-turtle trans-turtle)]))
+
   )
