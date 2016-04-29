@@ -5,13 +5,15 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
   :dependencies [[org.clojure/clojure "1.8.0"]
-                 [org.clojure/clojurescript "1.8.40"]
-                 [org.clojure/tools.reader "1.0.0-alpha3"]
+                 [org.clojure/clojurescript "1.8.51"]
                  [org.clojure/tools.analyzer.jvm "0.6.9"]
-
-                 [devcards "0.2.1-6" :exclusions [org.clojure/tools.reader]]
+                 [cljsjs/react-dom "15.0.1-0"]
+                 [cljsjs/react-dom-server "15.0.1-0"]
+                 [devcards "0.2.1-6" :exclusions [org.clojure/tools.reader
+                                                  cljs/react
+                                                  cljsjs/react-dom-server]]
                  [sablono "0.6.3"]
-                 [reagent "0.6.0-alpha"]
+                 [reagent "0.6.0-SNAPSHOT"]
 
                  [org.clojure/core.match "0.3.0-alpha4"]
                  [org.clojure/core.async "0.2.374"]
