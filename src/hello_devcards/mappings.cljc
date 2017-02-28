@@ -6,7 +6,7 @@
    [complex.number :as n]
    [hello-devcards.geometry :as g]))
 
-;; a maaping that maps unit circle
+;; a mapping that maps unit circle
 ;; center to midpoint
 ;; radius to an eigth of screen spcace
 ;; where up is really up

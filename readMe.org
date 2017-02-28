@@ -20,7 +20,7 @@
    #+BEGIN_SRC shell
      lein figwheel
 
-     http://localhost:3449/cards.html
+     http://localhost:3451/cards.html
    #+END_SRC
 
 ** pixie-turtle

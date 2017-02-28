@@ -62,7 +62,7 @@
   "M 30 100 Q 80 30 100 100 T 200 80"
   (sab/html
    [:div
-    [:svg {:width 400 :height 400}
+    [:svg {:width 400 :height 400 :xmlns "http://www.w3.org/2000/svg"}
      [:path {:d "M 30 100 Q 80 30 100 100 T 200 80"
              :stroke "red"
              :fill "none"}]
@@ -193,4 +193,43 @@
 the quadratic bezier is orange"
   (fn [app _] [interactive-bezier app])
   (reagent/atom bezier-state)
+  {:inspect-data true})
+
+;; interactive arc
+(def arc-state
+  {:start [250 200]
+   :radii [25 25]
+   :large-arc 0
+   :sweep-flag 0
+   :end [200 250]})
+
+(defn arc-path [app]
+  (let [{:keys [start radii large-arc sweep-flag end]} app
+        [sx sy] start
+        [rx ry] radii
+        [ex ey] end
+        v ["M" sx sy "A" rx ry 0 large-arc sweep-flag ex ey]
+        path (clojure.string/join " " v)]
+    path))
+
+(defn svg-arc
+  [app color]
+  [:path {:d (arc-path app) :stroke color :fill "none"}])
+
+(defn interactive-arc [app-state]
+  (let [app @app-state
+        {:keys [start end]} app
+        id "arc"]
+    [:div {:id "interactive-arc"}
+     [:p (arc-path app)]
+     [:svg {:width 400 :height 400 :view-box "0 0 400 400"
+            :id id}
+      (svg-arc app "orange")
+      (svg-point start "green" id :start app-state)
+      (svg-point end "red" id :end app-state)]]))
+
+(defcard-rg interactive-arc-card
+  "## interactive arc"
+  (fn [app _] [interactive-arc app])
+  (reagent/atom arc-state)
   {:inspect-data true})
